@@ -17,11 +17,14 @@
         async function authenticate() {
             try {
                 console.log("Authenticating with SFMC...");
+                console.log("1");
+                console.log(process.env.client_id);
+                console.log(process.env.SFMC_API_URL);
                 const response = await axios.post(process.env.SFMC_AUTH_URL, {
                     grant_type: "client_credentials",
-                    client_id: process.env.SFMC_CLIENT_ID,
-                    client_secret: process.env.SFMC_CLIENT_SECRET,
-                    account_id: process.env.SFMC_ACCOUNT_ID,
+                    client_id: process.env.client_id,
+                    client_secret: process.env.client_secret,
+                    account_id: process.env.account_id,
                 }, {
                     headers: { "Content-Type": "application/json" }
                 });
@@ -89,11 +92,12 @@
                 console.log("SFMC Response:", response.data);
 
                 // Assuming response determines opt-in/opt-out status
-                const optInStatus = response.data?.attributeSets[0]?.items[0]?.values.find(v => v.name === "OperationStatus")?.value;
+                console.log()
+                const optInStatus = response.data.operationStatus === "OK" ? "Yes" : "No";
 
                 const responseObject = {
                     success: true,
-                    optInStatus: optInStatus === "OK" ? "Yes" : "No" ///check here
+                    optInStatus: optInStatus
                 };
 
                 console.log("Response Object:", JSON.stringify(responseObject));
