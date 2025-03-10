@@ -13,6 +13,8 @@ define(["postmonger"], function (Postmonger) {
   $(window).ready(onRender);
 
   connection.on("initActivity", initialize);
+  
+
   connection.on("requestedTokens", onGetTokens);
   connection.on("requestedEndpoints", onGetEndpoints);
   connection.on("clickedNext", onClickedNext);
@@ -125,6 +127,7 @@ define(["postmonger"], function (Postmonger) {
   function onGetEndpoints(endpoints) {
     console.log("Received Endpoints:", endpoints);
   }
+ 
 
   function onClickedNext() {
     connection.trigger("nextStep");
