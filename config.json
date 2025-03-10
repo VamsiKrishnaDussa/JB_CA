@@ -1,0 +1,48 @@
+{
+  "workflowApiVersion": "1.1",
+  "metaData": {
+    "icon": "images/sms.png",
+    "category": "message"
+  },
+  "type": "REST",
+  "lang": {
+    "en-US": {
+      "name": "Custom Activity with Mobile Number",
+      "description": "Activity to send a POST request based on the Mobile Number."
+    }
+  },
+  "arguments": {
+    "execute": {
+      "inArguments": [
+        {
+          "mobileNumber": "{{Contact.Default.PhoneNumber}}"
+        }
+      ],
+      "outArguments": [
+        {
+          "operationStatus": ""
+        }
+      ],
+      "url": "https://mcs7y3dcpf-lv8b7ccjgjhdpl-78.rest.marketingcloudapis.com/contacts/v1/contacts"
+    }
+  },
+  "configurationArguments": {
+    "save": {
+      "url": "URI/for/your/activity/save"
+    },
+    "publish": {
+      "url": "URI/for/your/activity/publish"
+    },
+    "validate": {
+      "url": "URI/for/your/activity/validate"
+    },
+    "stop": {
+      "url": "URI/for/your/activity/stop"
+    }
+  },
+  "wizardSteps": [
+    { "label": "Step 1", "key": "step1" },
+    { "label": "Step 2", "key": "step2" },
+    { "label": "Step 3", "key": "step3" }
+  ]
+}
