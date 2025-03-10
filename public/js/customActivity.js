@@ -20,6 +20,8 @@ define(["postmonger"], function (Postmonger) {
   connection.on("gotoStep", onGotoStep);
 
   function onRender() {
+    connection.trigger("requestTokens");
+    connection.trigger("requestEndpoints");
     connection.trigger("ready");
 
     // When the "Send Request" button is clicked, call the API
@@ -40,10 +42,8 @@ define(["postmonger"], function (Postmonger) {
   }
 
   function sendPostRequest(mobileNumber) {
-    // Update the UI
     showStep("step2");
 
-    // Prepare the payload for the POST request
     var requestData = {
       "contactKey": "postmandemo6",
       "attributeSets": [
@@ -84,25 +84,23 @@ define(["postmonger"], function (Postmonger) {
       ]
     };
 
-    // Make the POST request
     $.ajax({
       url: "https://mcs7y3dcpf-lv8b7ccjgjhdpl-78.rest.marketingcloudapis.com/contacts/v1/contacts",
       method: "POST",
       contentType: "application/json",
       data: JSON.stringify(requestData),
-      success: function (response) {
-        var operationStatus = response.OperationStatus;
-        if (operationStatus === "OK") {
-          showStep("step3");
-          $("#status").html("Success");
-          updateJourney("Yes");
-        } else {
-          showStep("step3");
-          $("#status").html("Failed");
-          updateJourney("No");
-        }
+      headers: {
+        "Authorization": "Bearer YOUR_ACCESS_TOKEN"
       },
-      error: function () {
+      success: function (response) {
+        console.log("Response from SFMC:", response);
+        var operationStatus = response.OperationStatus;
+        showStep("step3");
+        $("#status").html(operationStatus === "OK" ? "Success" : "Failed");
+        updateJourney(operationStatus === "OK" ? "Yes" : "No");
+      },
+      error: function (xhr) {
+        console.error("Error response:", xhr);
         showStep("step3");
         $("#status").html("Error occurred");
         updateJourney("No");
@@ -121,11 +119,11 @@ define(["postmonger"], function (Postmonger) {
   }
 
   function onGetTokens(tokens) {
-    // You can handle tokens here if needed
+    console.log("Received Tokens:", tokens);
   }
 
   function onGetEndpoints(endpoints) {
-    // You can handle endpoints here if needed
+    console.log("Received Endpoints:", endpoints);
   }
 
   function onClickedNext() {
