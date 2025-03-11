@@ -1,6 +1,6 @@
     //const express = require('express');
     const axios = require('axios');
-    const configJSON = require('../config/config-json');
+    const configJSON = require('../config/config-json.js');
     require("dotenv").config();
 
     module.exports = function inboundCallActivity(app, options) {
