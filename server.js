@@ -23,7 +23,7 @@ app.get('/activity/config/config-json.js', (req, res) => {
 });
 
 //config.js
-app.get("/config.js", (req, res) => {
+app.get("/config.json", (req, res) => {
     res.sendFile(path.join(__dirname, "activity/config/config-json.js"));
 });
 
