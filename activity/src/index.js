@@ -1,35 +1,44 @@
-require(['postmonger', 'jquery'], function (Postmonger, $) {
+define(["postmonger"], function (Postmonger) {
+    "use strict";
+  
     var connection = new Postmonger.Session();
-    var activity = {};
-
-    $(document).ready(function () {
-        connection.on('initActivity', onInitActivity);
-        connection.trigger('ready');
+    var payload = {}; // Stores activity data
+  
+    // Event Listeners
+    connection.on("initActivity", initialize);
+    connection.on("clickedNext", save);
+  
+    // Trigger 'ready' event when the window loads
+    $(window).ready(function () {
+      connection.trigger("ready");
     });
-
-    // function onInitActivity(payload) {
-    //     console.log('in activity');
-    //     connection.trigger('ready');
-    //     // activity = payload;
-    //     // var hasInArguments = activity.arguments &&
-    //     //     activity.arguments.execute &&
-    //     //     activity.arguments.execute.inArguments &&
-    //     //     activity.arguments.execute.inArguments.length > 0;
-
-    //     // var inArguments = hasInArguments ? activity.arguments.execute.inArguments : [];
-
-    //     // console.log('Activity Data:', JSON.stringify(activity, null, 4));
-    //     // console.log('InArguments:', inArguments);
-
-    //     // var mobileNumberArg = inArguments.find(arg => arg.mobileNumber);
-    //     // if (mobileNumberArg) {
-    //     //     $('#MobileNumber').val(mobileNumberArg.mobileNumber);
-    //     // }
-    // }
-
-    connection.on("initActivity", function (data) {
-        console.log("Activity Data:", data);
-        $("#mobileNumber").val(data.inArguments?.[0]?.mobileNumber || "");
-    });
-    
-});
+  
+    // Initialize function: Receives payload from SFMC
+    function initialize(data) {
+      if (data) {
+        payload = data;
+      }
+  
+      console.log("Activity Initialized:", payload);
+  
+      // Enable "Next" button
+      connection.trigger("updateButton", { button: "next", enabled: true });
+    }
+  
+    // Save function: Sends data back to SFMC
+    function save() {
+      payload["arguments"] = payload["arguments"] || {};
+      payload["arguments"].execute = payload["arguments"].execute || {};
+      payload["arguments"].execute.inArguments = [
+        { mobileNumber: $("#mobileNumber").val() } // Get mobile number from input field
+      ];
+  
+      payload["metaData"] = payload["metaData"] || {};
+      payload["metaData"].isConfigured = true;
+  
+      console.log("Saving Payload:", payload);
+  
+      connection.trigger("updateActivity", payload);
+    }
+  });
+  
