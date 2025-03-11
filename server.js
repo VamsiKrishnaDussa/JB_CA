@@ -44,12 +44,12 @@ app.get('/styles.css',(req,res)=>{
 )
 
 app.post("/activity/save", (req, res) => {
-    console.log("Activity Save Triggered", req.body);
+    console.log("/activity/save called with:", req.body);
     res.status(200).send({ success: true });
 });
 
 app.post("/activity/validate", (req, res) => {
-    console.log("Activity Validation Triggered", req.body);
+    console.log("/activity/validate called with:", req.body);
     res.status(200).send({ success: true });
 });
 
