@@ -38,6 +38,11 @@ app.get('/index.html', (req, res) => {
     res.sendFile(path.join(__dirname, 'activity/html/index.html'));
 });
 
+app.get('/styles.css',(req,res)=>{
+    res.sendFile(path.join(__dirname,'activity/html/styles.css'));
+}
+)
+
 // Start Server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
