@@ -34,7 +34,7 @@ app.get("/config.js", (req, res) => {
 });
 
 // Serve index.html properly
-app.get('/', (req, res) => {
+app.get('/index.html', (req, res) => {
     res.sendFile(path.join(__dirname, 'activity/html/index.html'));
 });
 
