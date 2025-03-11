@@ -58,26 +58,17 @@
 
 define(["postmonger"], function (Postmonger) {
     var connection = new Postmonger.Session();
+    var activity = {};
 
-    // Wait for SFMC to initialize
     connection.on("initActivity", function (data) {
+        activity = data;
         console.log("SFMC Activity Initialized", data);
-
-        // Notify SFMC that Custom Activity is ready
         connection.trigger("ready");
     });
 
-    // Ensure form submission works after the form loads
-    document.addEventListener("DOMContentLoaded", function () {
-        document.getElementById("submitBtn").addEventListener("click", function () {
-            var mobileNumber = document.getElementById("mobileNumber").value.trim();
-            
-            if (!mobileNumber) {
-                alert("Please enter a valid mobile number.");
-                return;
-            }
-
-            console.log("Mobile Number Entered:", mobileNumber);
-        });
+    connection.on("requestedSave", function () {
+        activity.arguments.execute.inArguments = [{ "mobileNumber": "{{Contact.Attribute.MobileNumber}}" }];
+        connection.trigger("updateActivity", activity);
     });
 });
+
