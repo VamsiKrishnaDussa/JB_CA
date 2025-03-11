@@ -11,21 +11,23 @@ require(['postmonger', 'jquery'], function (Postmonger, $) {
     });
 
     function onInitActivity(payload) {
-        activity = payload;
-        var hasInArguments = activity.arguments &&
-            activity.arguments.execute &&
-            activity.arguments.execute.inArguments &&
-            activity.arguments.execute.inArguments.length > 0;
+        console.log('in activity');
+        connection.trigger('ready');
+        // activity = payload;
+        // var hasInArguments = activity.arguments &&
+        //     activity.arguments.execute &&
+        //     activity.arguments.execute.inArguments &&
+        //     activity.arguments.execute.inArguments.length > 0;
 
-        var inArguments = hasInArguments ? activity.arguments.execute.inArguments : [];
+        // var inArguments = hasInArguments ? activity.arguments.execute.inArguments : [];
 
-        console.log('Activity Data:', JSON.stringify(activity, null, 4));
-        console.log('InArguments:', inArguments);
+        // console.log('Activity Data:', JSON.stringify(activity, null, 4));
+        // console.log('InArguments:', inArguments);
 
-        var mobileNumberArg = inArguments.find(arg => arg.mobileNumber);
-        if (mobileNumberArg) {
-            $('#MobileNumber').val(mobileNumberArg.mobileNumber);
-        }
+        // var mobileNumberArg = inArguments.find(arg => arg.mobileNumber);
+        // if (mobileNumberArg) {
+        //     $('#MobileNumber').val(mobileNumberArg.mobileNumber);
+        // }
     }
 
     function onDoneButtonClick() {
