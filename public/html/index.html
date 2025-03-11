@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Journey Builder Activity</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"></script>
+</head>
+<body>
+    <h3>Mobile Number Attribute</h3>
+    <textarea id="MobileNumber"></textarea>
+    <br>
+    <button id="submitBtn">Submit</button>
+
+    <script>
+        require.config({
+            paths: {
+                "postmonger": "https://cdnjs.cloudflare.com/ajax/libs/postmonger/1.0.0/postmonger.min",
+                "jquery": "https://code.jquery.com/jquery-3.7.1.min",
+                "app": "/activity/app/app"
+            }
+        });
+
+        require(['jquery', 'postmonger', 'app'], function ($, Postmonger, app) {
+            var connection = new Postmonger.Session();
+            var activity = {};
+
+            $(document).ready(function () {
+                connection.on('initActivity', function (payload) {
+                    activity = payload;
+                    var inArguments = activity.arguments?.execute?.inArguments || [];
+                    var mobileNumberArg = inArguments.find(arg => arg.mobileNumber);
+                    if (mobileNumberArg) {
+                        $('#MobileNumber').val(mobileNumberArg.mobileNumber);
+                    }
+                });
+
+                connection.trigger('ready');
+
+                $('#submitBtn').on('click', function () {
+                    var mobileNumber = $('#MobileNumber').val().trim();
+                    if (!mobileNumber) {
+                        alert("⚠ Please enter a mobile number!");
+                        return;
+                    }
+
+                    activity.metaData.isConfigured = true;
+                    activity.arguments.execute.inArguments = [{ mobileNumber }];
+                    activity.name = `Check Opt-In for ${mobileNumber}`;
+
+                    console.log('Updated Activity:', JSON.stringify(activity, null, 4));
+                    connection.trigger('updateActivity', activity);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

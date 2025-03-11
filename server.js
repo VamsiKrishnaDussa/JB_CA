@@ -1,29 +1,28 @@
 const express = require('express');
 const path = require('path');
 const inboundCallActivity = require('./activity/app/app');
-const configJSON = require('./activity/config/config-json'); 
 
 const app = express();
 
-// Middleware to parse JSON
+// Middleware
 app.use(express.json());
 
-// Serve static files for the front-end
+// Serve Static Files
 app.use('/activity/html', express.static(path.join(__dirname, 'activity/html')));
-app.use('/activity/app', express.static(path.join(__dirname, 'activity/app')));
-app.use('/activity/styles', express.static(path.join(__dirname, 'activity/styles')));
+app.use('/activity/config', express.static(path.join(__dirname, 'activity/config')));
+app.use('/public', express.static(path.join(__dirname, 'public')));
 
-
-app.get('/activity/config/config.json', (req, res) => {
-    res.status(200).json(configJSON(req)); // Executes the function and returns JSON
+// Route for Config JSON
+app.get('/activity/config/config-json.js', (req, res) => {
+    const configJSON = require('./activity/config/config-json.js');
+    res.status(200).json(configJSON(req));
 });
 
-// Initialize the Inbound Call Activity
+// Initialize SFMC Inbound Call Activity
 inboundCallActivity(app, { rootDirectory: __dirname });
 
-// Start the server
+// Start Server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
-    console.log(`Open http://localhost:${PORT}/activity/html/index.html`);
+    console.log(`🚀 Server running on http://localhost:${PORT}`);
 });

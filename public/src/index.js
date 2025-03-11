@@ -30,7 +30,12 @@ require(['postmonger', 'jquery'], function (Postmonger, $) {
 
     function onDoneButtonClick() {
         activity.metaData.isConfigured = true;
-        var mobileNumber = $('#MobileNumber').val();
+        var mobileNumber = $('#MobileNumber').val().trim();
+
+        if (!mobileNumber) {
+            alert("⚠ Please enter a mobile number!");
+            return;
+        }
 
         activity.arguments.execute.inArguments = [{ mobileNumber }];
         activity.name = `Check Opt-In for ${mobileNumber}`;
