@@ -8,7 +8,7 @@ module.exports = function configJSON(req) {
             execute: {
                 inArguments: [{ mobileNumber: "{{Contact.Attribute.MobileNumber}}" }],
                 outArguments: [{ optInStatus: "" }],
-                url: "https://${req.headers.host}/execute",
+                "url": "https://customactivityv2.herokuapp.com/execute",
                 timeout: 10000,
                 retryCount: 3,
                 retryDelay: 1000
