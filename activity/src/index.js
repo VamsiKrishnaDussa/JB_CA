@@ -1,73 +1,47 @@
-// define([
-//     "postmonger"
-// ], function (Postmonger) {
+// define(["postmonger"], function (Postmonger) {
 //     var connection = new Postmonger.Session();
-//     var mobileNumber = "";
+//     var activity = {};
 
-//     // Initialize SFMC Custom Activity
 //     connection.on("initActivity", function (data) {
+//         activity = data;
 //         console.log("SFMC Activity Initialized", data);
+//         connection.trigger("ready");
 //     });
 
-//     // Handle form submission
-//     function submitMobileNumber() {
-//         mobileNumber = document.getElementById("mobileNumber").value.trim();
-
-//         if (!mobileNumber) {
-//             alert("Please enter a valid mobile number.");
-//             return;
-//         }
-
-//         // Send mobile number to API
-//         fetch("https://customactivityv2-c60375761890.herokuapp.com/execute", {
-//             method: "POST",
-//             headers: { "Content-Type": "application/json" },
-//             body: JSON.stringify({ mobileNumber: mobileNumber })
-//         })
-//             .then(response => response.json())
-//             .then(data => {
-//                 console.log("API Response:", data);
-//                 document.getElementById("status").innerText = "Opt-In Status: " + (data.optInStatus || "Unknown");
-
-//                 // Send data back to SFMC
-//                 connection.trigger("updateActivity", {
-//                     arguments: {
-//                         execute: {
-//                             inArguments: [{ mobileNumber: mobileNumber }],
-//                             outArguments: [{ optInStatus: data.optInStatus }]
-//                         }
-//                     }
-//                 });
-//             })
-//             .catch(error => {
-//                 console.error("Error:", error);
-//                 document.getElementById("status").innerText = "Error checking status.";
-//             });
-//     }
-
-//     // Bind submit button
-//     document.addEventListener("DOMContentLoaded", function () {
-//         document.getElementById("submitBtn").addEventListener("click", submitMobileNumber);
+//     connection.on("requestedSave", function () {
+//         activity.arguments.execute.inArguments = [{ "mobileNumber": "{{Contact.Attribute.MobileNumber}}" }];
+//         connection.trigger("updateActivity", activity);
 //     });
-
-//     // Notify SFMC that custom activity is ready
-//     connection.trigger("ready");
 // });
-
 
 
 define(["postmonger"], function (Postmonger) {
     var connection = new Postmonger.Session();
     var activity = {};
 
+    // SFMC Journey Builder initializes the activity
     connection.on("initActivity", function (data) {
         activity = data;
         console.log("SFMC Activity Initialized", data);
         connection.trigger("ready");
     });
 
+   
+    document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById("submitBtn").addEventListener("click", function () {
+            var mobileNumber = document.getElementById("mobileNumber").value;
+            console.log("Captured Mobile Number:", mobileNumber);
+
+            // Store mobile number in activity arguments
+            activity.arguments.execute.inArguments = [{ "mobileNumber": mobileNumber }];
+            
+            // Notify SFMC that activity is updated
+            connection.trigger("updateActivity", activity);
+        });
+    });
+
+    // Handle Save Event in SFMC
     connection.on("requestedSave", function () {
-        activity.arguments.execute.inArguments = [{ "mobileNumber": "{{Contact.Attribute.MobileNumber}}" }];
         connection.trigger("updateActivity", activity);
     });
 });
