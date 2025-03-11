@@ -11,18 +11,23 @@ app.use(cors()); // Allow all origins
 app.use(express.json());
 inboundCallActivity(app, { rootDirectory: __dirname });
 
-// ✅ Correctly serve static files from "activity"
+//  Correctly serve static files from "activity"
 app.use('/activity/html', express.static(path.join(__dirname, 'activity/html')));
 app.use('/activity/config', express.static(path.join(__dirname, 'activity/config')));
 app.use('/activity/src', express.static(path.join(__dirname, 'activity/src')));
 
-// ✅ Ensure `/config-json.js` is accessible
+//  Ensure `/config-json.js` is accessible
 app.get('/activity/config/config-json.js', (req, res) => {
     res.type('application/javascript');
     res.sendFile(path.join(__dirname, 'activity/config/config-json.js'));
 });
 
-// ✅ Serve index.html properly
+//config.js
+app.get("/config.js", (req, res) => {
+    res.sendFile(path.join(__dirname, "activity/config/config-json.js"));
+});
+
+// Serve index.html properly
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'activity/html/index.html'));
 });
