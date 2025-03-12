@@ -1,7 +1,7 @@
 module.exports = function configJSON(req) {
     return {
         workflowApiVersion: "1.1",
-        metaData: { icon: "images/icon.svg", category: "customer" },
+        metaData: { icon: "images/whatsapp.webp", category: "customer" },
         type: "REST",
         lang: { "en-US": { name: "Opt-In Check", description: "Checks if the user is opted in or out." } },
         arguments: {
