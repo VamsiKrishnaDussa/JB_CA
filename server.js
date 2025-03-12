@@ -33,6 +33,10 @@ app.get("/config.js", (req, res) => {
     res.sendFile(path.join(__dirname, "activity/config/config-json.js"));
 });
 
+app.get("/postmonger.js", (req, res) => {
+    res.sendFile(path.join(__dirname, "activity/src/postmonger.js"));
+});
+
 // Serve index.html properly
 app.get('/index.html', (req, res) => {
     res.sendFile(path.join(__dirname, 'activity/html/index.html'));
