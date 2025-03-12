@@ -6,6 +6,7 @@ define(["postmonger"], function (Postmonger) {
 
     $(window).ready(onRender);
 
+    // Event Listeners
     connection.on("initActivity", initialize);
     connection.on("requestedTokens", onGetTokens);
     connection.on("requestedEndpoints", onGetEndpoints);
@@ -18,10 +19,10 @@ define(["postmonger"], function (Postmonger) {
         connection.trigger("requestTokens");
         connection.trigger("requestEndpoints");
 
-        // Disable Next button initially
+        // Initially disable the "Next" button
         connection.trigger("updateButton", { button: "next", enabled: false });
 
-        // Enable Next button when a mobile number is entered
+        // Enable the Next button when a mobile number is entered
         $("#mobileNumber").on("input", function () {
             var mobile = $("#mobileNumber").val().trim();
             console.log("Mobile Number Entered:", mobile);
@@ -30,6 +31,11 @@ define(["postmonger"], function (Postmonger) {
                 button: "next",
                 enabled: mobile.length > 0,
             });
+        });
+
+        // Debugging initActivity event
+        connection.on("initActivity", function(data) {
+            console.log("initActivity received:", data);
         });
     }
 
