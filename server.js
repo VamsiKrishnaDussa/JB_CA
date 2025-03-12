@@ -3,9 +3,9 @@ const path = require('path');
 const inboundCallActivity = require('./activity/app/app');
 
 const app = express();
-const cors = require('cors'); // Import CORS
+const cors = require('cors'); 
 
-app.use(cors()); // Allow all origins
+app.use(cors()); 
 
 
 app.use(express.json());
