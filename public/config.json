@@ -1,0 +1,75 @@
+{
+    "workflowApiVersion": "1.1",
+    "metaData": {
+      "icon": "images/whatsapp-icon.jpg",
+      "category": "message"
+    },
+    "type": "REST",
+    "lang": {
+      "en-US": {
+        "name": "Opt-In",
+        "description": "Custom Activity in Marekting cloud."
+      }
+    },
+    "arguments": {
+      "execute": {
+        "inArguments": [
+          {
+            "phoneNumber": "{{Contact.Default.PhoneNumber}}"
+          }
+        ],
+        "outArguments": [
+          {
+            "OptInStatus": ""
+          }
+        ],
+        "url": "https:///execute"
+      }
+    },
+    "configurationArguments": {
+      "save": {
+        "url": "URI/for/your/activity/save"
+      },
+      "publish": {
+        "url": "URI/for/your/activity/publish"
+      },
+      "validate": {
+        "url": "URI/for/your/activity/validate"
+      },
+      "stop": {
+        "url": "URI/for/your/activity/stop"
+      }
+    },
+
+    "userInterfaces": {
+      "configModal": {
+        "height": 200,
+        "width": 300,
+        "fullscreen": true
+      }
+    },
+    "schema": {
+      "arguments": {
+        "execute": {
+          "inArguments": [
+            {
+              "phoneNumber": {
+                "dataType": "Phone",
+                "isNullable": false,
+                "direction": "in"
+              }
+            }
+          ],
+          "outArguments": [
+            {
+              "phoneNumber": {
+                "dataType": "Phone",
+                "direction": "out",
+                "access": "visible"
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
