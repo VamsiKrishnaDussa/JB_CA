@@ -78,11 +78,46 @@ function buildPayload(phoneNumber) {
 }
 
 
+// app.post('/execute', async (req, res) => {
+//     console.log('Received /execute request:', JSON.stringify(req.body));
+
+//     try {
+//         const { inArguments } = req.body || {};
+//         if (!inArguments || !inArguments.length || !inArguments[0].phoneNumber) {
+//             return res.status(400).json({ error: "Missing phoneNumber in request" });
+//         }
+
+//         const phoneNumber = inArguments[0].phoneNumber;
+//         console.log("Processing phone number:", phoneNumber);
+
+//         const accessToken = await authenticate();
+
+        
+//         const payload = buildPayload(phoneNumber);
+//         console.log("Sending data to SFMC:", JSON.stringify(payload, null, 2));
+
+  
+//         const response = await axios.post(process.env.SFMC_API_URL, payload, {
+//             headers: {
+//                 "Content-Type": "application/json",
+//                 Authorization: `Bearer ${accessToken}`,
+//             },
+//         });
+
+//         console.log("SFMC Response:", response.data);
+//         const optInStatus = response.data?.operationStatus === "OK" ? "Yes" : "No";
+
+//         return res.status(200).json({ success: true, optInStatus });
+//     } catch (error) {
+//         console.error("Error processing request:", error.response?.data || error.message);
+//         return res.status(500).json({ error: error.message });
+//     }
+// });
 app.post('/execute', async (req, res) => {
     console.log('Received /execute request:', JSON.stringify(req.body));
 
     try {
-        const { inArguments } = req.body || {};
+        const { inArguments } = req.body;
         if (!inArguments || !inArguments.length || !inArguments[0].phoneNumber) {
             return res.status(400).json({ error: "Missing phoneNumber in request" });
         }
@@ -91,12 +126,10 @@ app.post('/execute', async (req, res) => {
         console.log("Processing phone number:", phoneNumber);
 
         const accessToken = await authenticate();
-
-        
         const payload = buildPayload(phoneNumber);
+
         console.log("Sending data to SFMC:", JSON.stringify(payload, null, 2));
 
-  
         const response = await axios.post(process.env.SFMC_API_URL, payload, {
             headers: {
                 "Content-Type": "application/json",
