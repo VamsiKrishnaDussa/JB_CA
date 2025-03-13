@@ -29,7 +29,7 @@ define(["postmonger"], function (Postmonger) {
     });
 
     connection.on("clickedNext", function () {
-        var phoneNumber = $("#phoneNumber").val().trim(); // Trim spaces
+        var phoneNumber = $("#inputBox").val().trim(); // Trim spaces
 
         if (!phoneNumber) {
             console.error("Phone number is missing!");

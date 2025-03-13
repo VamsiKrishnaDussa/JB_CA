@@ -65,7 +65,7 @@ app.post('/execute', async (req, res) => {
     console.log('Received /execute request:', JSON.stringify(req.body));
 
     try {
-        const { inArguments } = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
+        const { inArguments } = req.body || {};
         if (!inArguments || !inArguments.length || !inArguments[0].phoneNumber) {
             return res.status(400).json({ error: "Missing phoneNumber in request" });
         }
