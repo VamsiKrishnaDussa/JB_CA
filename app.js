@@ -3,6 +3,10 @@ const axios = require('axios');
 const bodyParser = require('body-parser');
 const path = require('path');
 require("dotenv").config();
+const cors = require("cors");
+
+app.use(cors()); // Allow all origins
+app.options("*", cors()); // Pre-flight request handling
 
 const app = express();
 app.use(bodyParser.json());
