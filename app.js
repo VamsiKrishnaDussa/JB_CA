@@ -17,6 +17,25 @@ app.use(express.static(path.join(__dirname, 'public')));
 console.log("Inbound Call Custom Activity Initialized");
 
 
+// async function authenticate() {
+//     try {
+//         console.log("Authenticating with SFMC...");
+//         const response = await axios.post(process.env.SFMC_AUTH_URL, {
+//             grant_type: "client_credentials",
+//             client_id: process.env.CLIENT_ID,
+//             client_secret: process.env.CLIENT_SECRET,
+//             account_id: process.env.ACCOUNT_ID,
+//         }, {
+//             headers: { "Content-Type": "application/json" }
+//         });
+
+//         console.log("Authentication Successful!");
+//         return response.data.access_token;
+//     } catch (error) {
+//         console.error("SFMC Authentication Failed:", error.response?.data || error.message);
+//         throw new Error("Failed to authenticate with SFMC");
+//     }
+// }
 async function authenticate() {
     try {
         console.log("Authenticating with SFMC...");
@@ -25,15 +44,13 @@ async function authenticate() {
             client_id: process.env.CLIENT_ID,
             client_secret: process.env.CLIENT_SECRET,
             account_id: process.env.ACCOUNT_ID,
-        }, {
-            headers: { "Content-Type": "application/json" }
-        });
+        }, { headers: { "Content-Type": "application/json" } });
 
         console.log("Authentication Successful!");
         return response.data.access_token;
     } catch (error) {
         console.error("SFMC Authentication Failed:", error.response?.data || error.message);
-        throw new Error("Failed to authenticate with SFMC");
+        throw new Error("Failed to authenticate with SFMC"); // This prevents infinite loading
     }
 }
 
