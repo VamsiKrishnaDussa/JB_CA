@@ -17,7 +17,7 @@ define(["postmonger"], function (Postmonger) {
 
         // Call API to fetch opt-in status
         $.ajax({
-            url: "https://your-api-endpoint.com/execute",
+            url: "https://customapp-9584657f551b.herokuapp.com/execute",
             type: "POST",
             contentType: "application/json",
             data: JSON.stringify({ phoneNumber: phoneNumber }),

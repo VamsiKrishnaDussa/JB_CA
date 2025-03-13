@@ -1,75 +1,74 @@
 {
-    "workflowApiVersion": "1.1",
-    "metaData": {
+  "workflowApiVersion": "1.1",
+  "metaData": {
       "icon": "images/whatsapp-icon.jpg",
       "category": "message"
-    },
-    "type": "REST",
-    "lang": {
+  },
+  "type": "REST",
+  "lang": {
       "en-US": {
-        "name": "Opt-In",
-        "description": "Custom Activity in Marekting cloud."
+          "name": "Opt-In",
+          "description": "Custom Activity in Marketing Cloud."
       }
-    },
-    "arguments": {
+  },
+  "arguments": {
       "execute": {
-        "inArguments": [
-          {
-            "phoneNumber": "{{Contact.Default.PhoneNumber}}"
-          }
-        ],
-        "outArguments": [
-          {
-            "OptInStatus": ""
-          }
-        ],
-        "url": "https:///execute"
-      }
-    },
-    "configurationArguments": {
-      "save": {
-        "url": "URI/for/your/activity/save"
-      },
-      "publish": {
-        "url": "URI/for/your/activity/publish"
-      },
-      "validate": {
-        "url": "URI/for/your/activity/validate"
-      },
-      "stop": {
-        "url": "URI/for/your/activity/stop"
-      }
-    },
-
-    "userInterfaces": {
-      "configModal": {
-        "height": 200,
-        "width": 300,
-        "fullscreen": true
-      }
-    },
-    "schema": {
-      "arguments": {
-        "execute": {
           "inArguments": [
-            {
-              "phoneNumber": {
-                "dataType": "Phone",
-                "isNullable": false,
-                "direction": "in"
+              {
+                  "phoneNumber": "{{Contact.Default.PhoneNumber}}"
               }
-            }
           ],
           "outArguments": [
-            {
-              "phoneNumber": {
-                "dataType": "Phone",
-                "direction": "out",
-                "access": "visible"
+              {
+                  "OptInStatus": ""
               }
-            }
-          ]
-        }
+          ],
+          "url": "https://customapp-9584657f551b.herokuapp.com/execute"
       }
-    }
+  },
+  "configurationArguments": {
+      "save": {
+          "url": "https://customapp-9584657f551b.herokuapp.com/save"
+      },
+      "publish": {
+          "url": "https://customapp-9584657f551b.herokuapp.com/publish"
+      },
+      "validate": {
+          "url": "https://customapp-9584657f551b.herokuapp.com/validate"
+      },
+      "stop": {
+          "url": "https://customapp-9584657f551b.herokuapp.com/stop"
+      }
+  },
+  "userInterfaces": {
+      "configModal": {
+          "height": 200,
+          "width": 300,
+          "fullscreen": true
+      }
+  },
+  "schema": {
+      "arguments": {
+          "execute": {
+              "inArguments": [
+                  {
+                      "phoneNumber": {
+                          "dataType": "Phone",
+                          "isNullable": false,
+                          "direction": "in"
+                      }
+                  }
+              ],
+              "outArguments": [
+                  {
+                      "OptInStatus": {
+                          "dataType": "String",
+                          "direction": "out",
+                          "access": "visible"
+                      }
+                  }
+              ]
+          }
+      }
   }
+}
