@@ -8,7 +8,8 @@ const cors = require("cors");
 const app = express(); 
 app.use(cors()); 
 app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'modules', 'public')));
+
 
 console.log("Inbound Call Custom Activity Initialized");
 

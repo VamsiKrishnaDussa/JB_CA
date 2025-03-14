@@ -1,0 +1,60 @@
+{
+    "workflowApiVersion": "1.1",
+    "metaData": {
+        "icon": "whatsapp.jpg",
+        "category": "custom"
+    },
+    "type": "REST",
+    "lang": {
+        "en-US": {
+            "name": "Opt-In",
+            "description": "Custom Activity in Marketing Cloud."
+        }
+    },
+    "arguments": {
+        "execute": {
+            "inArguments": [
+                {
+                    "phoneNumber": "{{ContactDefaults.PhoneNumber}}"
+                }
+            ],
+            "url": "https://customapp-9584657f551b.herokuapp.com/modules/execute"
+        }
+    },
+    "configurationArguments": {
+        "save": {
+            "url": "https://customapp-9584657f551b.herokuapp.com/modules/save"
+        },
+        "publish": {
+            "url": "https://customapp-9584657f551b.herokuapp.com/modules/publish"
+        },
+        "validate": {
+            "url": "https://customapp-9584657f551b.herokuapp.com/modules/validate"
+        },
+        "stop": {
+            "url": "https://customapp-9584657f551b.herokuapp.com/modules/stop"
+        }
+    },
+    "userInterfaces": {
+        "configModal": {
+            "height": 200,
+            "width": 300,
+            "fullscreen": true
+        }
+    },
+    "schema": {
+        "arguments": {
+            "execute": {
+                "inArguments": [
+                    {
+                        "phoneNumber": {
+                            "dataType": "Phone",
+                            "isNullable": false,
+                            "direction": "in"
+                        }
+                    }
+                ]
+            }
+        }
+    }
+}
