@@ -13,22 +13,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 console.log("Inbound Call Custom Activity Initialized");
 
 
-const requiredEnvVars = [
-    "SFMC_AUTH_URL",
-    "CLIENT_ID",
-    "CLIENT_SECRET",
-    "ACCOUNT_ID",
-    "SFMC_API_URL"
-];
-
-for (const envVar of requiredEnvVars) {
-    if (!process.env[envVar]) {
-        console.error(`Missing required environment variable: ${envVar}`);
-        process.exit(1); // Exit with error code
-    }
-
-}
-
 
 async function authenticate() {
     try {
