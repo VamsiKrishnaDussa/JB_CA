@@ -10,15 +10,9 @@ define(["postmonger"], function (Postmonger) {
         console.log("SFMC Custom Activity UI rendering...");
         connection.trigger("ready");
 
-        connection.on("initActivity", function (data) {
-            console.log("initActivity Data Received:", JSON.stringify(data, null, 2));
-            payload = data || {};
-            // Populate the input field if data is available
-            if (payload.arguments && payload.arguments.execute && payload.arguments.execute.inArguments && payload.arguments.execute.inArguments[0] && payload.arguments.execute.inArguments[0].phoneNumber) {
-                $("#inputBox").val(payload.arguments.execute.inArguments[0].phoneNumber);
-            }
-        });
-
+        connection.on("initActivity", onInitActivity);
+        connection.on("clickedNext", onNextButtonClick);
+        connection.on("clickedDone", onDoneButtonClick);
         connection.on("error", function (err) {
             console.error("Postmonger Error:", err);
         });
@@ -26,7 +20,17 @@ define(["postmonger"], function (Postmonger) {
         console.log("Event listeners attached. Waiting for user input...");
     }
 
-    connection.on("clickedNext", function () {
+    function onInitActivity(data) {
+        console.log("initActivity Data Received:", JSON.stringify(data, null, 2));
+        payload = data || {};
+
+        // Populate input field if available
+        if (payload.arguments?.execute?.inArguments?.[0]?.phoneNumber) {
+            $("#inputBox").val(payload.arguments.execute.inArguments[0].phoneNumber);
+        }
+    }
+
+    function onNextButtonClick() {
         console.log("Next button clicked. Processing input...");
 
         var phoneNumber = $("#inputBox").val().trim();
@@ -34,7 +38,7 @@ define(["postmonger"], function (Postmonger) {
 
         if (!phoneNumber) {
             console.error("Phone number is missing!");
-            alert("Please enter a phone number."); // Notify user
+            alert("Please enter a phone number.");
             return;
         }
 
@@ -44,7 +48,7 @@ define(["postmonger"], function (Postmonger) {
 
         console.log("Payload prepared:", JSON.stringify(payload, null, 2));
 
-        // Add loading indicator
+        // Show loading indicator
         $("#loadingIndicator").show();
 
         $.ajax({
@@ -60,27 +64,24 @@ define(["postmonger"], function (Postmonger) {
 
                 connection.trigger("updateActivity", payload);
                 console.log("Triggered updateActivity with updated payload.");
+
                 // Hide loading indicator
                 $("#loadingIndicator").hide();
-
             },
             error: function (err) {
                 console.error("API call failed:", err);
-                alert("API call failed. Please check the console for details."); // Notify user
-                // Hide loading indicator
+                alert("API call failed. Please check the console.");
                 $("#loadingIndicator").hide();
-
             }
         });
-    });
+    }
 
-    // Ensuring that "Done" works properly
-    connection.on("clickedDone", function () {
+    function onDoneButtonClick() {
         console.log("Done button clicked. Finalizing activity...");
 
-        if (!payload.arguments || !payload.arguments.execute || !payload.arguments.execute.inArguments) {
+        if (!payload.arguments?.execute?.inArguments) {
             console.error("Invalid payload detected before finalizing.");
-            alert("An error occurred. Please check the console."); // Notify user
+            alert("An error occurred. Please check the console.");
             return;
         }
 
@@ -88,7 +89,7 @@ define(["postmonger"], function (Postmonger) {
 
         connection.trigger("updateActivity", payload);
         console.log("Activity updated. Ready to save.");
-    });
+    }
 
     console.log("Custom Activity script initialized.");
 });
