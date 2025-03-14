@@ -1,3 +1,21 @@
+define(["postmonger"], function (Postmonger) {
+    var connection = new Postmonger.Session();
+    
+    console.log("Initializing Custom Activity...");
+
+    connection.on("initActivity", function (data) {
+        console.log("initActivity received:", JSON.stringify(data, null, 2));
+    });
+
+    connection.trigger("ready"); // Ensure MC knows the activity is ready
+
+    connection.on("clickedNext", function () {
+        console.log("Next clicked.");
+    });
+});
+
+
+
 // define(["postmonger"], function (Postmonger) {
 //     console.log("Loading Custom Activity script...");
 
@@ -96,25 +114,25 @@
 
 
 
-connection.on("initActivity",onInit);
-connection.on("requestedSchema", onRequestedSchema);
-connection.on("requestedInteraction",onRequestedInteraction);
-connection.on("updateActivity", onUpdateActivity);
-connection.on("clickedNext",onClickedNext)
+// connection.on("initActivity",onInit);
+// connection.on("requestedSchema", onRequestedSchema);
+// connection.on("requestedInteraction",onRequestedInteraction);
+// connection.on("updateActivity", onUpdateActivity);
+// connection.on("clickedNext",onClickedNext)
 
 
-function onInit(data){
-    console.log("initActivity event received");
-}
+// function onInit(data){
+//     console.log("initActivity event received");
+// }
 
-function onRequestedSchema(schemaObj){
-    console.log("requestedSchema event received");
-}
+// function onRequestedSchema(schemaObj){
+//     console.log("requestedSchema event received");
+// }
 
-function onRequestedInteraction(journeyObj){
-    console.log("requestedInteraction event received");
-}
+// function onRequestedInteraction(journeyObj){
+//     console.log("requestedInteraction event received");
+// }
 
-function onClickedNext(){
-    console.log("clickedNext event received");
-}
+// function onClickedNext(){
+//     console.log("clickedNext event received");
+// }
