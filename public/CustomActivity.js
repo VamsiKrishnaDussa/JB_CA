@@ -13,6 +13,10 @@ define(["postmonger"], function (Postmonger) {
         connection.on("initActivity", function (data) {
             console.log("initActivity Data Received:", JSON.stringify(data, null, 2));
             payload = data || {};
+            // Populate the input field if data is available
+            if (payload.arguments && payload.arguments.execute && payload.arguments.execute.inArguments && payload.arguments.execute.inArguments[0] && payload.arguments.execute.inArguments[0].phoneNumber) {
+                $("#inputBox").val(payload.arguments.execute.inArguments[0].phoneNumber);
+            }
         });
 
         connection.on("error", function (err) {
@@ -30,6 +34,7 @@ define(["postmonger"], function (Postmonger) {
 
         if (!phoneNumber) {
             console.error("Phone number is missing!");
+            alert("Please enter a phone number."); // Notify user
             return;
         }
 
@@ -38,6 +43,9 @@ define(["postmonger"], function (Postmonger) {
         payload.arguments.execute.inArguments = [{ phoneNumber: phoneNumber }];
 
         console.log("Payload prepared:", JSON.stringify(payload, null, 2));
+
+        // Add loading indicator
+        $("#loadingIndicator").show();
 
         $.ajax({
             url: "https://customapp-9584657f551b.herokuapp.com/execute",
@@ -52,9 +60,16 @@ define(["postmonger"], function (Postmonger) {
 
                 connection.trigger("updateActivity", payload);
                 console.log("Triggered updateActivity with updated payload.");
+                // Hide loading indicator
+                $("#loadingIndicator").hide();
+
             },
             error: function (err) {
                 console.error("API call failed:", err);
+                alert("API call failed. Please check the console for details."); // Notify user
+                // Hide loading indicator
+                $("#loadingIndicator").hide();
+
             }
         });
     });
@@ -65,6 +80,7 @@ define(["postmonger"], function (Postmonger) {
 
         if (!payload.arguments || !payload.arguments.execute || !payload.arguments.execute.inArguments) {
             console.error("Invalid payload detected before finalizing.");
+            alert("An error occurred. Please check the console."); // Notify user
             return;
         }
 
