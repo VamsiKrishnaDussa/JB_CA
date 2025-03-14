@@ -184,6 +184,7 @@ app.post('/execute', async (req, res) => {
 
         // Authenticate and send data to SFMC
         const accessToken = await authenticate();
+        phoneNumber='918686793220';
         const payload = buildPayload(phoneNumber);
 
         console.log("Sending data to SFMC:", JSON.stringify(payload, null, 2));
