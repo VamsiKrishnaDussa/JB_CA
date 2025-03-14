@@ -18,6 +18,11 @@
                     "phoneNumber": "{{ContactDefaults.PhoneNumber}}"
                 }
             ],
+            "outArguments": [
+                {
+                  "OptInStatus": ""
+                }
+            ],
             "url": "https://customapp-9584657f551b.herokuapp.com/modules/execute"
         }
     },

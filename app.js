@@ -113,8 +113,6 @@
 // app.listen(PORT, () => console.log(`Custom Activity API running on port ${PORT}`));
 
 
-
-
 const express = require('express');
 const axios = require('axios');
 const bodyParser = require('body-parser');
@@ -122,13 +120,14 @@ const path = require('path');
 require("dotenv").config();
 const cors = require("cors");
 
-const app = express();
-app.use(cors({ origin: "*", methods: "GET,POST", allowedHeaders: "Content-Type,Authorization" }));
+const app = express(); 
+app.use(cors()); 
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'modules', 'public')));
 
 console.log("Inbound Call Custom Activity Initialized");
 
+// Authenticate with SFMC
 async function authenticate() {
     try {
         console.log("Authenticating with SFMC...");
@@ -139,18 +138,15 @@ async function authenticate() {
             account_id: process.env.ACCOUNT_ID,
         }, { headers: { "Content-Type": "application/json" } });
 
-        if (!response.data.access_token) {
-            throw new Error("No access token received from SFMC!");
-        }
-
         console.log("Authentication Successful!");
         return response.data.access_token;
     } catch (error) {
         console.error("SFMC Authentication Failed:", error.response?.data || error.message);
-        throw new Error("Failed to authenticate with SFMC. Check API credentials.");
+        throw new Error("Failed to authenticate with SFMC");
     }
 }
 
+// Build payload for SFMC
 function buildPayload(phoneNumber) {
     return {
         contactKey: `Test_${phoneNumber}`,
@@ -173,19 +169,20 @@ function buildPayload(phoneNumber) {
     };
 }
 
+// Handle /execute API request
 app.post('/execute', async (req, res) => {
-    console.log('Received /execute request:', JSON.stringify(req.body, null, 2));
+    console.log('Received /execute request:', JSON.stringify(req.body));
 
     try {
         const { inArguments } = req.body;
         if (!inArguments || !inArguments.length || !inArguments[0].phoneNumber) {
-            console.error("Missing phoneNumber in request payload.");
             return res.status(400).json({ error: "Missing phoneNumber in request" });
         }
 
         const phoneNumber = inArguments[0].phoneNumber;
         console.log("Processing phone number:", phoneNumber);
 
+        // Authenticate and send data to SFMC
         const accessToken = await authenticate();
         const payload = buildPayload(phoneNumber);
 
@@ -208,7 +205,7 @@ app.post('/execute', async (req, res) => {
     }
 });
 
-// Standard SFMC endpoints
+// Other endpoints required by SFMC
 app.post('/save', (req, res) => res.status(200).json({ success: true }));
 app.post('/publish', (req, res) => res.status(200).json({ success: true }));
 app.post('/validate', (req, res) => res.status(200).json({ success: true }));
@@ -216,3 +213,4 @@ app.post('/stop', (req, res) => res.status(200).json({ success: true }));
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Custom Activity API running on port ${PORT}`));
+

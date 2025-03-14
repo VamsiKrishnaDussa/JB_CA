@@ -100,9 +100,8 @@
 
 
 
-
 define(["postmonger"], function (Postmonger) {
-    console.log("Initializing Custom Activity script...");
+    console.log("Loading Custom Activity script...");
 
     var connection = new Postmonger.Session();
     var payload = {};
@@ -127,6 +126,7 @@ define(["postmonger"], function (Postmonger) {
         console.log("initActivity Data Received:", JSON.stringify(data, null, 2));
         payload = data || {};
 
+        // Populate input field if available
         if (payload.arguments?.execute?.inArguments?.[0]?.phoneNumber) {
             $("#inputBox").val(payload.arguments.execute.inArguments[0].phoneNumber);
         }
@@ -139,24 +139,29 @@ define(["postmonger"], function (Postmonger) {
         console.log("Phone Number Entered:", phoneNumber);
 
         if (!phoneNumber) {
-            alert("Please enter a valid phone number.");
             console.error("Phone number is missing!");
+            alert("Please enter a phone number.");
             return;
         }
 
+        // Correctly format the payload
         payload.arguments = payload.arguments || {};
         payload.arguments.execute = payload.arguments.execute || {};
         payload.arguments.execute.inArguments = [{ phoneNumber: phoneNumber }];
 
         console.log("Payload prepared:", JSON.stringify(payload, null, 2));
 
+        // Show loading indicator
         $("#loadingIndicator").show();
 
+        // Call the API with the correct format
         $.ajax({
-            url: "https://customapp-9584657f551b.herokuapp.com/execute",
+            url: "https://customapp-9584657f551b.herokuapp.com/execute",  // UPDATE THIS WITH YOUR CORRECT ENDPOINT
             type: "POST",
             contentType: "application/json",
-            data: JSON.stringify({ inArguments: [{ phoneNumber: phoneNumber }] }),
+            data: JSON.stringify({
+                inArguments: [{ phoneNumber: phoneNumber }]
+            }),
             success: function (response) {
                 console.log("API Response:", JSON.stringify(response, null, 2));
 
@@ -166,13 +171,12 @@ define(["postmonger"], function (Postmonger) {
                 connection.trigger("updateActivity", payload);
                 console.log("Triggered updateActivity with updated payload.");
 
+                // Hide loading indicator
                 $("#loadingIndicator").hide();
             },
-            error: function (xhr, status, error) {
-                console.error("API call failed. Status:", status);
-                console.error("Error:", error);
-                console.error("Response Text:", xhr.responseText);
-                alert("API call failed! See console for details.");
+            error: function (err) {
+                console.error("API call failed:", err);
+                alert("API call failed. Please check the console.");
                 $("#loadingIndicator").hide();
             }
         });
@@ -182,8 +186,8 @@ define(["postmonger"], function (Postmonger) {
         console.log("Done button clicked. Finalizing activity...");
 
         if (!payload.arguments?.execute?.inArguments) {
-            alert("An error occurred. Please check the console.");
             console.error("Invalid payload detected before finalizing.");
+            alert("An error occurred. Please check the console.");
             return;
         }
 
@@ -195,4 +199,3 @@ define(["postmonger"], function (Postmonger) {
 
     console.log("Custom Activity script initialized.");
 });
-
