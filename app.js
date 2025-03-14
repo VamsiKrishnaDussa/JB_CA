@@ -20,16 +20,16 @@ async function authenticate() {
 
         // Print environment variables for debugging
         console.log("🔹 SFMC_AUTH_URL:", process.env.SFMC_AUTH_URL);
-        console.log("🔹 CLIENT_ID:", process.env.CLIENT_ID);
-        console.log("🔹 CLIENT_SECRET:", process.env.CLIENT_SECRET ? "***** (hidden)" : "MISSING");
-        console.log("🔹 ACCOUNT_ID:", process.env.ACCOUNT_ID);
+        console.log("🔹 CLIENT_ID:", process.env.client_id);
+        console.log("🔹 CLIENT_SECRET:", process.env.client_secret ? "***** (hidden)" : "MISSING");
+        console.log("🔹 ACCOUNT_ID:", process.env.account_id);
 
 
         const response = await axios.post(process.env.SFMC_AUTH_URL, {
             grant_type: "client_credentials",
-            client_id: process.env.CLIENT_ID,
-            client_secret: process.env.CLIENT_SECRET,
-            account_id: process.env.ACCOUNT_ID,
+            client_id: process.env.client_id,
+            client_secret: process.env.client_secret,
+            account_id: process.env.account_id,
         }, { headers: { "Content-Type": "application/json" } });
 
         console.log("✅ Authentication Successful! Token:", response.data.access_token);
