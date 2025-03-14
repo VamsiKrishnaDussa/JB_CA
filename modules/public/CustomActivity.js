@@ -156,7 +156,7 @@ define(["postmonger"], function (Postmonger) {
 
         // Call the API with the correct format
         $.ajax({
-            url: "https://customapp-9584657f551b.herokuapp.com/execute",  // UPDATE THIS WITH YOUR CORRECT ENDPOINT
+            url: "https://customapp-9584657f551b.herokuapp.com/execute",  
             type: "POST",
             contentType: "application/json",
             data: JSON.stringify({
