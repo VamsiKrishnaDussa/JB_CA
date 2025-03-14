@@ -4,7 +4,7 @@
         "icon": "whatsapp.jpg",
         "category": "custom"
     },
-    "type": "REST",
+    "type": "RESTDECISION",
     "lang": {
         "en-US": {
             "name": "Opt-In",
@@ -47,6 +47,24 @@
             "fullscreen": true
         }
     },
+    "outcomes": [
+        {
+            "arguments": {
+                "branchResult": "OptedIn"
+            },
+            "metaData": {
+                "label": "Opted In"
+            }
+        },
+        {
+            "arguments": {
+                "branchResult": "OptedOut"
+            },
+            "metaData": {
+                "label": "Opted Out"
+            }
+        }
+    ],
     "schema": {
         "arguments": {
             "execute": {
