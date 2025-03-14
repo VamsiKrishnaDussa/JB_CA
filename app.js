@@ -148,6 +148,25 @@ app.post('/execute', async (req, res) => {
 });
 
 
+app.post('/save', (req, res) => {
+    console.log("Save API Called");
+    res.status(200).json({ success: true });
+});
+
+app.post('/publish', (req, res) => {
+    console.log("Publish API Called");
+    res.status(200).json({ success: true });
+});
+
+app.post('/validate', (req, res) => {
+    console.log("Validate API Called");
+    res.status(200).json({ success: true });
+});
+
+app.post('/stop', (req, res) => {
+    console.log("Stop API Called");
+    res.status(200).json({ success: true });
+});
 
 
 
