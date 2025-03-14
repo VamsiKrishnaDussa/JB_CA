@@ -1,21 +1,41 @@
-<!-- <html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Custom Activity Journey Builder</title>
     <link rel="stylesheet" type="text/css" href="styles.css">
+
+    <!-- Load Dependencies -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/postmonger@0.0.16/postmonger.min.js"></script>
+
+    <style>
+        #loadingIndicator {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
     <h3>Configuration JSON</h3>
     <label for="inputBox">Enter Mobile Number</label>
     <input type="text" id="inputBox" placeholder="Mobile Number">
-    <script src="CustomActivity.js"></script>
+    <div id="loadingIndicator">Loading...</div>
+
+    <!-- Ensure the script loads correctly -->
+    <script>
+        require(["CustomActivity"], function(CustomActivity) {
+            console.log("CustomActivity.js loaded successfully.");
+        });
+    </script>
 </body>
-</html> -->
+</html>
 
 
-<html>
+<!-- <html>
 <head>
     <title>Custom Activity Journey Builder</title>
     <link rel="stylesheet" type="text/css" href="styles.css">
@@ -37,7 +57,7 @@
     <div id="loadingIndicator">Loading...</div>
     <script src="CustomActivity.js"></script>
 </body>
-</html>
+</html> -->
 
 
 <!-- <html>
