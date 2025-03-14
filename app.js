@@ -16,13 +16,13 @@ console.log("Inbound Call Custom Activity Initialized");
 
 async function authenticate() {
     try {
-        console.log("🔹 Authenticating with SFMC...");
+        console.log("Authenticating with SFMC.");
 
         // Print environment variables for debugging
-        console.log("🔹 SFMC_AUTH_URL:", process.env.SFMC_AUTH_URL);
-        console.log("🔹 CLIENT_ID:", process.env.client_id);
-        console.log("🔹 CLIENT_SECRET:", process.env.client_secret ? "***** (hidden)" : "MISSING");
-        console.log("🔹 ACCOUNT_ID:", process.env.account_id);
+        console.log("SFMC_AUTH_URL:", process.env.SFMC_AUTH_URL);
+        console.log("CLIENT_ID:", process.env.client_id);
+        console.log("CLIENT_SECRET:", process.env.client_secret ? "***** (hidden)" : "MISSING");
+        console.log("ACCOUNT_ID:", process.env.account_id);
 
 
         const response = await axios.post(process.env.SFMC_AUTH_URL, {
@@ -32,10 +32,10 @@ async function authenticate() {
             account_id: process.env.account_id,
         }, { headers: { "Content-Type": "application/json" } });
 
-        console.log("✅ Authentication Successful! Token:", response.data.access_token);
+        console.log("Authentication Successful! Token:", response.data.access_token);
         return response.data.access_token;
     } catch (error) {
-        console.error("❌ SFMC Authentication Failed:", error.response?.data || error.message);
+        console.error("SFMC Authentication Failed:", error.response?.data || error.message);
         throw new Error("Failed to authenticate with SFMC");
     }
 }
@@ -74,17 +74,17 @@ app.post('/execute', async (req, res) => {
         // Extract phone number, handle undefined values
         let phoneNumber = inArguments?.[0]?.phoneNumber;
         if (!phoneNumber || phoneNumber.includes("{{")) {
-            console.warn("⚠️ Received unresolved SFMC token. Using default number.");
+            console.warn("Received unresolved SFMC token. Using default number.");
             phoneNumber = "918686793220"; // Default test number
         }
 
-        console.log("📞 Processing phone number:", phoneNumber);
+        console.log("Processing phone number:", phoneNumber);
 
         // Authenticate and send data to SFMC
         const accessToken = await authenticate();
         const payload = buildPayload(phoneNumber);
 
-        console.log("📤 Sending data to SFMC:", JSON.stringify(payload, null, 2));
+        console.log("Sending data to SFMC:", JSON.stringify(payload, null, 2));
 
         const response = await axios.post(process.env.SFMC_API_URL, payload, {
             headers: {
@@ -93,12 +93,12 @@ app.post('/execute', async (req, res) => {
             },
         });
 
-        console.log("✅ SFMC Response:", JSON.stringify(response.data, null, 2));
+        console.log("SFMC Response:", JSON.stringify(response.data, null, 2));
         const optInStatus = response.data?.operationStatus === "OK" ? "Yes" : "No";
 
         return res.status(200).json({ success: true, optInStatus });
     } catch (error) {
-        console.error("❌ Error processing request:", error.response?.data || error.message);
+        console.error("Error processing request:", error.response?.data || error.message);
         return res.status(500).json({ error: error.response?.data || error.message });
     }
 });
