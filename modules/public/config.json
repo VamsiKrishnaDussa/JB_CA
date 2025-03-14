@@ -1,0 +1,83 @@
+{
+    "workflowApiVersion": "1.1",
+    "metaData": {
+        "icon": "whatsapp.jpg",
+        "category": "custom"
+    },
+    "type": "RESTDECISION",
+    "lang": {
+        "en-US": {
+            "name": "Opt-In",
+            "description": "Custom Activity in Marketing Cloud."
+        }
+    },
+    "arguments": {
+        "execute": {
+            "inArguments": [
+                {
+                    "phoneNumber": "{{Event.ChatEntryEven-df21b25f-26ec-a520-3ad8-430f4be0a895.'MobileNumber'}}"
+                }
+            ],
+            "outArguments": [
+                {
+                  "OptInStatus": ""
+                }
+            ],
+            "url": "https://splitbranch-ab8b48b255d1.herokuapp.com/modules/execute"
+        }
+    },
+    "configurationArguments": {
+        "save": {
+            "url": "https://splitbranch-ab8b48b255d1.herokuapp.com/modules/save"
+        },
+        "publish": {
+            "url": "https://splitbranch-ab8b48b255d1.herokuapp.com/modules/publish"
+        },
+        "validate": {
+            "url": "https://splitbranch-ab8b48b255d1.herokuapp.com/modules/validate"
+        },
+        "stop": {
+            "url": "https://splitbranch-ab8b48b255d1.herokuapp.com/modules/stop"
+        }
+    },
+    "userInterfaces": {
+        "configModal": {
+            "height": 200,
+            "width": 300,
+            "fullscreen": true
+        }
+    },
+    "outcomes": [
+        {
+            "arguments": {
+                "branchResult": "OptedIn"
+            },
+            "metaData": {
+                "label": "Opted In"
+            }
+        },
+        {
+            "arguments": {
+                "branchResult": "OptedOut"
+            },
+            "metaData": {
+                "label": "Opted Out"
+            }
+        }
+    ],
+    "schema": {
+        "arguments": {
+            "execute": {
+                "inArguments": [
+                    {
+                        "phoneNumber": {
+                            "dataType": "Phone",
+                            "isNullable": false,
+                            "direction": "in"
+                        }
+                    }
+                ]
+            }
+        }
+    }
+}
