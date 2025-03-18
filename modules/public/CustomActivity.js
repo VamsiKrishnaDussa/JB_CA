@@ -147,7 +147,7 @@ define(["postmonger"], function (Postmonger) {
         if (payload.arguments?.execute?.inArguments?.[0]?.phoneNumber) {
             $("#inputBox").val(payload.arguments.execute.inArguments[0].phoneNumber);
         }
-        connection.trigger("updateActivity", payload);
+      //  connection.trigger("updateActivity", payload);
     }
 
     function onNextButtonClick() {
@@ -163,7 +163,7 @@ define(["postmonger"], function (Postmonger) {
         }
 
         // Correctly format the payload
-        payload.arguments.execute.inArguments = [{ phoneNumber: phoneNumber }];
+       // payload.arguments.execute.inArguments = [{ phoneNumber: phoneNumber }];
         console.log("Payload prepared:", JSON.stringify(payload, null, 2));
 
         // Show loading indicator
