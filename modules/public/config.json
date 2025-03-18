@@ -15,7 +15,7 @@
         "execute": {
             "inArguments": [
                 {
-                    "phoneNumber": "{{Event.ChatEntryEvent-df21b25f-26ec-a520-3ad8-430f4be0a895.'MobileNumber'}}"
+                    "phoneNumber": "{{Event.ChatEntryEven-50cac2e7-f2aa-d05c-3024-460f0eaabe1c.'MobileNumber'}}"
                 }
             ],
             "outArguments": [
@@ -23,7 +23,7 @@
                   "OptInStatus": ""
                 }
             ],
-            "url": "https://splitbranch-ab8b48b255d1.herokuapp.com/modules/execute",
+            "url": "https://splitbranch-ab8b48b255d1.herokuapp.com/execute",
             "editable": true
         }
     },
