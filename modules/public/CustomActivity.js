@@ -184,6 +184,7 @@
 // });
 
 
+
 define(["postmonger"], function (Postmonger) {
     console.log("Loading Custom Activity script...");
 
@@ -213,13 +214,11 @@ define(["postmonger"], function (Postmonger) {
         payload.arguments = payload.arguments || {};
         payload.arguments.execute = payload.arguments.execute || {};
         payload.arguments.execute.inArguments = payload.arguments.execute.inArguments || [];
-        
-        // Ensure outArguments exists and sets a default value before activation
-        payload.arguments.execute.outArguments = payload.arguments.execute.outArguments || [{ OptInStatus: "Pending" }];
+        payload.arguments.execute.outArguments = payload.arguments.execute.outArguments || [];
 
         payload.metaData = payload.metaData || {};
         if (!payload.metaData.isConfigured) {
-            console.warn("Activity is not configured. Setting as configured.");
+            console.warn("Activity is not configured. Forcing configuration...");
             payload.metaData.isConfigured = true;
         }
 
@@ -250,8 +249,8 @@ define(["postmonger"], function (Postmonger) {
         }
 
         payload.arguments.execute.inArguments = [{ phoneNumber: phoneNumber }];
-        
         console.log("Payload prepared:", JSON.stringify(payload, null, 2));
+
         $("#loadingIndicator").show();
 
         $.ajax({
@@ -262,16 +261,23 @@ define(["postmonger"], function (Postmonger) {
             success: function (response) {
                 console.log("API Response:", JSON.stringify(response, null, 2));
 
-                let optInStatus = response.optInStatus === "Yes" ? "Yes" : "No";
-                let branchResult = optInStatus === "Yes" ? "OptedIn" : "OptedOut";
+                if (!response.optInStatus) {
+                    console.error("Missing optInStatus in API response:", response);
+                    alert("Error: API response is missing opt-in status.");
+                    $("#loadingIndicator").hide();
+                    return;
+                }
 
-                // Update outArguments with API response value
-                payload.arguments.execute.outArguments = [{ OptInStatus: optInStatus }];
+                let branchResult = response.optInStatus === "Yes" ? "OptedIn" : "OptedOut";
+
+                // **Ensure outArguments Exists**
+                payload.arguments.execute.outArguments = [{ OptInStatus: response.optInStatus }];
                 payload.outcome = branchResult;
 
                 console.log("Updated Payload with branchResult:", JSON.stringify(payload, null, 2));
+
                 connection.trigger("updateActivity", payload);
-                console.log("Triggered updateActivity with branch:", branchResult);
+                console.log(`Triggered updateActivity with branch: ${branchResult}`);
 
                 $("#loadingIndicator").hide();
             },
@@ -294,20 +300,21 @@ define(["postmonger"], function (Postmonger) {
         }
 
         payload.arguments.execute.inArguments = [{ phoneNumber: phoneNumber }];
-
-        // Keep outArguments to avoid missing required field
-        payload.arguments.execute.outArguments = payload.arguments.execute.outArguments || [{ OptInStatus: "Pending" }];
+        payload.arguments.execute.outArguments = [{ OptInStatus: "Pending" }];
         payload.arguments.execute.editable = true;
 
         payload.metaData = payload.metaData || {};
         payload.metaData.isConfigured = true;
 
         console.log("Final Payload Before Saving:", JSON.stringify(payload, null, 2));
+
+        console.log("Triggering updateActivity...");
         connection.trigger("updateActivity", payload);
     }
 
     console.log("Custom Activity script initialized.");
 });
+
 
 
 
