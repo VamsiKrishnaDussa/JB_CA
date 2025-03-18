@@ -170,7 +170,7 @@ define(["postmonger"], function (Postmonger) {
 
         // Call the API with the correct format
         $.ajax({
-            url: "https://customapp-9584657f551b.herokuapp.com/execute",
+            url: "https://splitbranch-ab8b48b255d1.herokuapp.com/execute",
             type: "POST",
             contentType: "application/json",
             data: JSON.stringify({
