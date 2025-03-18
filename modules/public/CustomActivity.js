@@ -144,8 +144,9 @@ define(["postmonger"], function (Postmonger) {
         payload.arguments.execute.inArguments = payload.arguments.execute.inArguments || [];
 
         // Populate input field if available
-        let phoneNumber = payload.arguments.execute.inArguments[0]?.phoneNumber || "";
-        $("#inputBox").val(phoneNumber);
+        if (payload.arguments?.execute?.inArguments?.[0]?.phoneNumber) {
+            $("#inputBox").val(payload.arguments.execute.inArguments[0].phoneNumber);
+        }
     }
 
     function onNextButtonClick() {
@@ -179,19 +180,16 @@ define(["postmonger"], function (Postmonger) {
                 console.log("API Response:", JSON.stringify(response, null, 2));
 
                 // Determine the correct branch based on opt-in status
-                let optInStatus = response.optInStatus || "Unknown"; // Add fallback
-                let branchResult = optInStatus === "Yes" ? "OptedIn" : "OptedOut";
+                let branchResult = response.optInStatus === 'Yes' ? 'OptedIn' : 'OptedOut';
 
                 // Update the payload with branch result for routing
-                payload.arguments.execute.outArguments = [{ OptInStatus: optInStatus }];
-                payload.arguments.execute.outArguments.push({ branchResult }); // Ensure SFMC recognizes this
+                payload.arguments.execute.outArguments = [{ OptInStatus: response.optInStatus }];
+                payload.outcome = branchResult; // Set branch outcome
 
                 console.log("Updated Payload with branchResult:", JSON.stringify(payload, null, 2));
 
-                // Trigger updateActivity to notify SFMC of branch routing
                 connection.trigger("updateActivity", payload);
                 console.log(`Triggered updateActivity with branch: ${branchResult}`);
-
                 // Hide loading indicator
                 $("#loadingIndicator").hide();
             },
@@ -206,11 +204,18 @@ define(["postmonger"], function (Postmonger) {
     function onDoneButtonClick() {
         console.log("Done button clicked. Finalizing activity...");
 
-        if (!payload.arguments?.execute?.inArguments) {
-            console.error("Invalid payload detected before finalizing.");
-            alert("An error occurred. Please check the console.");
+        var phoneNumber = $("#inputBox").val().trim();
+
+        if (!phoneNumber) {
+            console.error("Phone number is missing!");
+            alert("Please enter a phone number.");
             return;
         }
+
+        // Ensure execute.arguments structure exists
+        payload.arguments = payload.arguments || {};
+        payload.arguments.execute = payload.arguments.execute || {};
+        payload.arguments.execute.inArguments = [{ phoneNumber: phoneNumber }];
 
         console.log("Final Payload Before Saving:", JSON.stringify(payload, null, 2));
 
