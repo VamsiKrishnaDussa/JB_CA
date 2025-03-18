@@ -65,17 +65,24 @@ function buildPayload(phoneNumber) {
 
 
 app.post('/modules/execute', async (req, res) => {
-    console.log('📩 Received /execute request:', JSON.stringify(req.body, null, 2));
+    console.log('Received /execute request:', JSON.stringify(req.body, null, 2));
 
     try {
         const { inArguments } = req.body;
-
+        console.log(req.body);
         // Extract phone number, handle undefined values
-        let phoneNumber = inArguments?.[0]?.phoneNumber;
+        let phoneNumber = inArguments?.find(arg => arg.phoneNumber)?.phoneNumber;
+
         // if (!phoneNumber || phoneNumber.includes("{{")) {
         //     console.warn("Received unresolved SFMC token. Using default number.");
         //     phoneNumber = "918686793220"; // Default test number
         // }
+
+
+        if (phoneNumber && phoneNumber.includes('{{Event.')) {
+            console.error("⚠️ Placeholder detected instead of actual phone number.");
+            return res.status(400).json({ error: "MobileNumber not resolved, check Journey Event Data." });
+        }
 
         console.log("Processing phone number:", phoneNumber);
 
