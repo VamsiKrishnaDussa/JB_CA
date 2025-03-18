@@ -34,7 +34,7 @@ define(["postmonger"], function (Postmonger) {
         if (payload.arguments?.execute?.inArguments?.[0]?.phoneNumber) {
             $("#inputBox").val(payload.arguments.execute.inArguments[0].phoneNumber);
         }
-        connection.trigger("updateActivity", payload);
+     //   connection.trigger("updateActivity", payload);
     }
 
     function onNextButtonClick() {
