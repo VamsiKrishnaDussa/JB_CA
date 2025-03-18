@@ -122,5 +122,10 @@ app.post('/modules/stop', function(req, res) {
     console.log('debug: /modules/stop');
     return res.status(200).json({});
 });
+app.post('/modules/execute', (req, res) => {
+    res.status(200).json({ message: 'Execute received' });
+});
+
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Custom Activity API running on port ${PORT}`));
