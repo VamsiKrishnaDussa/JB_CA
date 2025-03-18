@@ -147,6 +147,7 @@ define(["postmonger"], function (Postmonger) {
         if (payload.arguments?.execute?.inArguments?.[0]?.phoneNumber) {
             $("#inputBox").val(payload.arguments.execute.inArguments[0].phoneNumber);
         }
+        connection.trigger("updateActivity", payload);
     }
 
     function onNextButtonClick() {
@@ -212,6 +213,9 @@ define(["postmonger"], function (Postmonger) {
             return;
         }
 
+
+        payload.arguments.execute.editable = true;
+        
         // Ensure execute.arguments structure exists
         payload.arguments = payload.arguments || {};
         payload.arguments.execute = payload.arguments.execute || {};
