@@ -38,7 +38,7 @@ define(["postmonger"], function (Postmonger) {
     // }
 
     function onInitActivity(data) {
-        console.log(" Received initActivity Data:", JSON.stringify(data, null, 2));
+        console.log("Received initActivity Data:", JSON.stringify(data, null, 2));
         payload = data || {};
     
         // Ensure necessary arguments exist
@@ -50,7 +50,7 @@ define(["postmonger"], function (Postmonger) {
         // Ensure metadata is configured
         payload.metaData = payload.metaData || {};
         if (!payload.metaData.isConfigured) {
-            console.warn(" Activity is not configured. Forcing configuration...");
+            console.warn("Activity is not configured. Forcing configuration...");
             payload.metaData.isConfigured = true;
         }
     
@@ -59,18 +59,23 @@ define(["postmonger"], function (Postmonger) {
             let phoneNumber = payload.arguments.execute.inArguments[0].phoneNumber;
             if (phoneNumber) {
                 $("#inputBox").val(phoneNumber);
-                console.log(" Loaded phone number:", phoneNumber);
+                console.log("Loaded phone number:", phoneNumber);
             } else {
-                console.warn(" No phone number found in inArguments.");
+                console.warn("No phone number found in inArguments.");
             }
         } else {
-            console.warn(" No inArguments found.");
+            console.warn("No inArguments found.");
         }
     
-        //  Ensure SFMC knows activity is configured
-        console.log(" Triggering updateActivity...");
+        // Ensure SFMC knows activity is configured and save the update
+        console.log("Triggering updateActivity...");
         connection.trigger("updateActivity", payload);
+    
+        // Explicitly trigger "save" to persist configuration
+        console.log("Triggering saveActivity...");
+        connection.trigger("save");
     }
+    
     
 
     function onNextButtonClick() {
