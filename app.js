@@ -95,7 +95,12 @@ app.post('/execute', async (req, res) => {
         console.log("SFMC Response:", JSON.stringify(response.data, null, 2));
         const optInStatus = response.data?.operationStatus === "OK" ? "Yes" : "No";
 
-        return res.status(200).json({ success: true, optInStatus });
+        return res.status(200).json({
+            outArguments: [
+                { OptInStatus: optInStatus }
+            ]
+        })
+
     } catch (error) {
         console.error("Error processing request:", error.response?.data || error.message);
         return res.status(500).json({ error: error.response?.data || error.message });
@@ -122,9 +127,32 @@ app.post('/modules/stop', function(req, res) {
     console.log('debug: /modules/stop');
     return res.status(200).json({});
 });
-app.post('/modules/execute', (req, res) => {
-    res.status(200).json({ message: 'Execute received' });
+
+
+
+
+
+app.post('/modules/execute', async (req, res) => {
+    console.log('Received /modules/execute request:', JSON.stringify(req.body, null, 2));
+
+    try {
+        // Call the actual /execute logic
+        const executeResponse = await axios.post('https://splitbranch-ab8b48b255d1.herokuapp.com/execute', req.body);
+        
+        console.log("Forwarded response from /execute:", JSON.stringify(executeResponse.data, null, 2));
+
+        // Ensure SFMC gets the correct format
+        return res.status(200).json({
+            success: true,
+            outArguments: [{ OptInStatus: executeResponse.data.optInStatus }]
+        });
+
+    } catch (error) {
+        console.error("Error in /modules/execute:", error.response?.data || error.message);
+        return res.status(500).json({ error: error.response?.data || error.message });
+    }
 });
+
 
 
 const PORT = process.env.PORT || 3000;
