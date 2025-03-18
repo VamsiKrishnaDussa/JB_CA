@@ -105,10 +105,22 @@ app.post('/execute', async (req, res) => {
 
 
 // Other endpoints required by SFMC
-app.post('/save', (req, res) => res.status(200).json({ success: true }));
-app.post('/publish', (req, res) => res.status(200).json({ success: true }));
-app.post('/validate', (req, res) => res.status(200).json({ success: true }));
-app.post('/stop', (req, res) => res.status(200).json({ success: true }));
 
+app.post('/modules/save', function(req, res) {
+    console.log('debug: /modules/stop');
+    return res.status(200).json({});
+});
+app.post('/modules/publish', function(req, res) {
+    console.log('debug: /modules/stop');
+    return res.status(200).json({});
+});
+app.post('/modules/validate', function(req, res) {
+    console.log('debug: /modules/stop');
+    return res.status(200).json({});
+});
+app.post('/modules/stop', function(req, res) {
+    console.log('debug: /modules/stop');
+    return res.status(200).json({});
+});
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Custom Activity API running on port ${PORT}`));
