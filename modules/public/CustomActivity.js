@@ -20,22 +20,58 @@ define(["postmonger"], function (Postmonger) {
         console.log("Event listeners attached. Waiting for user input...");
     }
 
-    function onInitActivity(data) {
-        console.log("initActivity Data Received:", JSON.stringify(data, null, 2));
-        payload = data || {};
+    // function onInitActivity(data) {
+    //     console.log("initActivity Data Received:", JSON.stringify(data, null, 2));
+    //     payload = data || {};
 
-        // Ensure arguments exist
+    //     // Ensure arguments exist
+    //     payload.arguments = payload.arguments || {};
+    //     payload.arguments.execute = payload.arguments.execute || {};
+    //     payload.arguments.execute.inArguments = payload.arguments.execute.inArguments || [];
+    //     payload.arguments.execute.outArguments = payload.arguments.execute.outArguments || [];
+
+    //     // Populate input field if available
+    //     if (payload.arguments?.execute?.inArguments?.[0]?.phoneNumber) {
+    //         $("#inputBox").val(payload.arguments.execute.inArguments[0].phoneNumber);
+    //     }
+    //  //   connection.trigger("updateActivity", payload);
+    // }
+
+    function onInitActivity(data) {
+        console.log(" Received initActivity Data:", JSON.stringify(data, null, 2));
+        payload = data || {};
+    
+        // Ensure necessary arguments exist
         payload.arguments = payload.arguments || {};
         payload.arguments.execute = payload.arguments.execute || {};
         payload.arguments.execute.inArguments = payload.arguments.execute.inArguments || [];
         payload.arguments.execute.outArguments = payload.arguments.execute.outArguments || [];
-
-        // Populate input field if available
-        if (payload.arguments?.execute?.inArguments?.[0]?.phoneNumber) {
-            $("#inputBox").val(payload.arguments.execute.inArguments[0].phoneNumber);
+    
+        // Ensure metadata is configured
+        payload.metaData = payload.metaData || {};
+        if (!payload.metaData.isConfigured) {
+            console.warn(" Activity is not configured. Forcing configuration...");
+            payload.metaData.isConfigured = true;
         }
-     //   connection.trigger("updateActivity", payload);
+    
+        // Populate input field if available
+        if (payload.arguments.execute.inArguments.length > 0) {
+            let phoneNumber = payload.arguments.execute.inArguments[0].phoneNumber;
+            if (phoneNumber) {
+                $("#inputBox").val(phoneNumber);
+                console.log(" Loaded phone number:", phoneNumber);
+            } else {
+                console.warn(" No phone number found in inArguments.");
+            }
+        } else {
+            console.warn(" No inArguments found.");
+        }
+    
+        //  Ensure SFMC knows activity is configured
+        console.log(" Triggering updateActivity...");
+        connection.trigger("updateActivity", payload);
     }
+    
 
     function onNextButtonClick() {
         console.log("Next button clicked. Processing input...");
@@ -91,28 +127,58 @@ define(["postmonger"], function (Postmonger) {
         });
     }
 
+    // function onDoneButtonClick() {
+    //     console.log("Done button clicked. Finalizing activity...");
+
+    //     var phoneNumber = $("#inputBox").val().trim();
+
+    //     if (!phoneNumber) {
+    //         console.error("Phone number is missing!");
+    //         alert("Please enter a phone number.");
+    //         return;
+    //     }
+
+    //     // Ensure execute.arguments structure exists
+    //     payload.arguments = payload.arguments || {};
+    //     payload.arguments.execute = payload.arguments.execute || {};
+    //     payload.arguments.execute.inArguments = [{ phoneNumber: phoneNumber }];
+    //     payload.arguments.execute.editable = true;
+
+    //     console.log("Final Payload Before Saving:", JSON.stringify(payload, null, 2));
+
+    //     connection.trigger("updateActivity", payload);
+    //     console.log("Activity updated. Ready to save.");
+    // }
+
+
     function onDoneButtonClick() {
-        console.log("Done button clicked. Finalizing activity...");
-
+        console.log(" Done button clicked. Finalizing activity...");
+    
         var phoneNumber = $("#inputBox").val().trim();
-
         if (!phoneNumber) {
             console.error("Phone number is missing!");
             alert("Please enter a phone number.");
             return;
         }
-
+    
         // Ensure execute.arguments structure exists
         payload.arguments = payload.arguments || {};
         payload.arguments.execute = payload.arguments.execute || {};
         payload.arguments.execute.inArguments = [{ phoneNumber: phoneNumber }];
+        payload.arguments.execute.outArguments = [{ OptInStatus: "Pending" }];
         payload.arguments.execute.editable = true;
-
+    
+        // Ensure activity is marked as configured
+        payload.metaData = payload.metaData || {};
+        payload.metaData.isConfigured = true;  
+    
         console.log("Final Payload Before Saving:", JSON.stringify(payload, null, 2));
-
+    
+        // send data to SFMC to confirm configuration
+        console.log(" Triggering updateActivity...");
         connection.trigger("updateActivity", payload);
-        console.log("Activity updated. Ready to save.");
     }
+    
 
     console.log("Custom Activity script initialized.");
 });
