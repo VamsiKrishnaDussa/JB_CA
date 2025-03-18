@@ -64,7 +64,7 @@ function buildPayload(phoneNumber) {
 }
 
 
-app.post('/execute', async (req, res) => {
+app.post('/modules/execute', async (req, res) => {
     console.log('📩 Received /execute request:', JSON.stringify(req.body, null, 2));
 
     try {
@@ -126,31 +126,6 @@ app.post('/modules/validate', function(req, res) {
 app.post('/modules/stop', function(req, res) {
     console.log('debug: /modules/stop');
     return res.status(200).json({});
-});
-
-
-
-
-
-app.post('/modules/execute', async (req, res) => {
-    console.log('Received /modules/execute request:', JSON.stringify(req.body, null, 2));
-
-    try {
-        // Call the actual /execute logic
-        const executeResponse = await axios.post('https://splitbranch-ab8b48b255d1.herokuapp.com/execute', req.body);
-        
-        console.log("Forwarded response from /execute:", JSON.stringify(executeResponse.data, null, 2));
-
-        // Ensure SFMC gets the correct format
-        return res.status(200).json({
-            success: true,
-            outArguments: [{ OptInStatus: executeResponse.data.optInStatus }]
-        });
-
-    } catch (error) {
-        console.error("Error in /modules/execute:", error.response?.data || error.message);
-        return res.status(500).json({ error: error.response?.data || error.message });
-    }
 });
 
 
