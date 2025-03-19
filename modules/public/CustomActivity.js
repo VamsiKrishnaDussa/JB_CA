@@ -40,13 +40,16 @@ define(["postmonger"], function (Postmonger) {
     function onInitActivity(data) {
         console.log("Received initActivity Data:", JSON.stringify(data, null, 2));
         payload = data || {};
+        console.log(payload);
+
     
         // Ensure necessary arguments exist
         payload.arguments = payload.arguments || {};
         payload.arguments.execute = payload.arguments.execute || {};
         payload.arguments.execute.inArguments = payload.arguments.execute.inArguments || [];
         payload.arguments.execute.outArguments = payload.arguments.execute.outArguments || [];
-    
+        console.log("printing arguments");
+        console.log(payload.arguments);
         // Ensure metadata is configured
         payload.metaData = payload.metaData || {};
         if (!payload.metaData.isConfigured) {
