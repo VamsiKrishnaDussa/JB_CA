@@ -69,7 +69,9 @@ app.post('/modules/execute', async (req, res) => {
 
     try {
         const { inArguments } = req.body;
+        console.log("printing body");
         console.log(req.body);
+        console.log("body printed");
         // Extract phone number, handle undefined values
         let phoneNumber = inArguments?.find(arg => arg.phoneNumber)?.phoneNumber;
 
