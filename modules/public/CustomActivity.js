@@ -47,7 +47,7 @@ define(["postmonger"], function (Postmonger) {
         payload.arguments = payload.arguments || {};
         payload.arguments.execute = payload.arguments.execute || {};
         payload.arguments.execute.inArguments = payload.arguments.execute.inArguments || [];
-        payload.arguments.execute.outArguments = payload.arguments.execute.outArguments || [];
+       // payload.arguments.execute.outArguments = payload.arguments.execute.outArguments || [];
         console.log("printing arguments");
         console.log(payload.arguments);
         // Ensure metadata is configured
@@ -173,7 +173,7 @@ define(["postmonger"], function (Postmonger) {
         payload.arguments = payload.arguments || {};
         payload.arguments.execute = payload.arguments.execute || {};
         payload.arguments.execute.inArguments = [{ phoneNumber: phoneNumber }];
-        payload.arguments.execute.outArguments = [{ OptInStatus: "Pending" }];
+      //  payload.arguments.execute.outArguments = [{ OptInStatus: "Pending" }];
         payload.arguments.execute.editable = true;
     
         // Ensure activity is marked as configured
