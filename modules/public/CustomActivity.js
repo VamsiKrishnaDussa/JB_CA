@@ -115,7 +115,7 @@ define(["postmonger"], function (Postmonger) {
                 let branchResult = response.optInStatus === 'Yes' ? 'OptedIn' : 'OptedOut';
 
                 // Update the payload with branch result for routing
-                payload.arguments.execute.outArguments = [{ OptInStatus: response.optInStatus }];
+              //  payload.arguments.execute.outArguments = [{ OptInStatus: response.optInStatus }];
                 payload.outcome = branchResult;
 
                 console.log("Updated Payload with branchResult:", JSON.stringify(payload, null, 2));
