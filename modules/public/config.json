@@ -15,7 +15,7 @@
         "execute": {
             "inArguments": [
                 {
-                    "phoneNumber": "{{Event.ChatEntryEven-d55d89d3-2c60-8e21-15c1-ec8e231c4e9c.MobileNumber}}"
+                    "phoneNumber": "{{Event.ChatEntryEven-d55d89d3-2c60-8e21-15c1-ec8e231c4e9c.\"MobileNumber\"}}"
                 }
             ],
             "outArguments": [
