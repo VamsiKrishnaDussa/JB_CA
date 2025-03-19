@@ -15,7 +15,7 @@
         "execute": {
             "inArguments": [
                 {
-                    "phoneNumber": "{{Contact.\"Contact Key\"}}"
+                  
                 }
             ],
             "outArguments": [
