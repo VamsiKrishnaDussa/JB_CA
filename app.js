@@ -126,7 +126,7 @@ app.post('/modules/execute', async (req, res) => {
     console.log('Received /execute request:', JSON.stringify(req.body, null, 2));
 
     try {
-        const { keyValue } = req.body; // Directly extract keyValue (which contains the phone number)
+        const { keyValue } = req.body; // Extract phone number
         let phoneNumber = keyValue; // Use keyValue as the phone number
 
         if (phoneNumber && phoneNumber.includes('{{Event.')) {
@@ -156,13 +156,14 @@ app.post('/modules/execute', async (req, res) => {
             outArguments: [
                 { OptInStatus: optInStatus }
             ]
-        })
+        });
 
     } catch (error) {
         console.error("Error processing request:", error.response?.data || error.message);
         return res.status(500).json({ error: error.response?.data || error.message });
     }
 });
+
 
 
 

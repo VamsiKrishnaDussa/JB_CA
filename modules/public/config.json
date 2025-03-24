@@ -15,11 +15,7 @@
         "execute": {
             "inArguments": [
                 {
-                    "phoneNumber": {
-                        "dataType": "Text",
-                        "isNullable": false,
-                        "direction": "in"
-                    }
+                    "phoneNumber": "{{ContactDefaults.PhoneNumber}}"
                 }
             ],
             "outArguments": [
