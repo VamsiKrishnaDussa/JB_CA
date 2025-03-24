@@ -63,7 +63,7 @@ define(["postmonger"], function (Postmonger) {
     
         // Explicitly trigger "save" to persist configuration
         console.log("Triggering saveActivity...");
-        connection.trigger("save");
+      //  connection.trigger("save");
     }
     
     
