@@ -14,8 +14,6 @@
     "arguments": {
         "execute": {
             "inArguments": [
-                {
-                }
             ],
             "outArguments": [
                 {
@@ -72,15 +70,6 @@
     "schema": {
         "arguments": {
             "execute": {
-                "inArguments": [
-                    {
-                        "phoneNumber": {
-                            "dataType": "Phone",
-                            "isNullable": false,
-                            "direction": "in"
-                        }
-                    }
-                ]
             }
         }
     }
