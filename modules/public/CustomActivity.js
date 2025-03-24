@@ -162,7 +162,6 @@
 
 
 
-
 define(["postmonger"], function (Postmonger) {
     console.log("Loading Custom Activity script...");
 
@@ -319,6 +318,7 @@ define(["postmonger"], function (Postmonger) {
 
     console.log("Custom Activity script initialized.");
 });
+
 
 
 
