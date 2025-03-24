@@ -19,6 +19,11 @@
             ],
             "outArguments": [
                 {
+                    "OptInStatus": {
+                        "dataType": "Text",
+                        "isNullable": true,
+                        "direction": "out"
+                    }
                 }
             ],
            "url": "https://splitbranch-ab8b48b255d1.herokuapp.com/modules/execute",
