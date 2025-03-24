@@ -70,7 +70,22 @@
     "schema": {
         "arguments": {
             "execute": {
+                "outArguments": [
+                    {
+                        "OptInStatus": {
+                            "dataType": "Text",
+                            "isNullable": true,
+                            "direction": "out"
+                        }
+                    }
+                  ]
             }
         }
-    }
+    },
+
+    "copySettings": {
+        "allowCopy": true,
+        "ignoreArguments": ["eventDefinitionKey"]
+      }
 }
+
