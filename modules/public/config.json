@@ -14,11 +14,14 @@
     "arguments": {
         "execute": {
             "inArguments": [
-                {
-                }
             ],
             "outArguments": [
                 {
+                    "OptInStatus": {
+                        "dataType": "Text",
+                        "isNullable": true,
+                        "direction": "out"
+                    }
                 }
             ],
            "url": "https://splitbranch-ab8b48b255d1.herokuapp.com/modules/execute",
@@ -67,16 +70,21 @@
     "schema": {
         "arguments": {
             "execute": {
-                "inArguments": [
+                "outArguments": [
                     {
-                        "phoneNumber": {
-                            "dataType": "Phone",
-                            "isNullable": false,
-                            "direction": "in"
+                        "OptInStatus": {
+                            "dataType": "Text",
+                            "isNullable": true,
+                            "direction": "out"
                         }
                     }
-                ]
+                  ]
             }
         }
-    }
+    },
+
+    "copySettings": {
+        "allowCopy": true,
+        "ignoreArguments": ["eventDefinitionKey"]
+      }
 }
