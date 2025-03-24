@@ -59,7 +59,9 @@
     ],
     "schema": {
         "arguments": {
-            "execute": {}
+            "execute": {
+                "inArguments": []
+            }
         }
     }
 }
