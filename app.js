@@ -107,6 +107,7 @@ app.post('/modules/execute', async (req, res) => {
         console.log(response.data?.operationStatus);
         console.log("response value printed");
         const optInStatus = response.data?.operationStatus === "OK" ? "Yes" : "No";
+        console.log("optin status:", optInStatus);
 
         return res.status(200).json({
             outArguments: [
