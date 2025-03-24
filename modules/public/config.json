@@ -14,6 +14,13 @@
     "arguments": {
         "execute": {
             "inArguments": [
+                {
+                    "phoneNumber": {
+                        "dataType": "Text",
+                        "isNullable": false,
+                        "direction": "in"
+                    }
+                }
             ],
             "outArguments": [
                 {
@@ -70,6 +77,15 @@
     "schema": {
         "arguments": {
             "execute": {
+                "inArguments": [
+                    {
+                        "phoneNumber": {
+                            "dataType": "Text",
+                            "isNullable": false,
+                            "direction": "in"
+                        }
+                    }
+                ],
                 "outArguments": [
                     {
                         "OptInStatus": {

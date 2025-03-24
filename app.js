@@ -64,26 +64,73 @@ function buildPayload(phoneNumber) {
 }
 
 
+// app.post('/modules/execute', async (req, res) => {
+//     console.log('Received /execute request:', JSON.stringify(req.body, null, 2));
+
+//     try {
+//         const { inArguments } = req.body;
+//         console.log("printing body");
+//         console.log(req.body);
+//         console.log("body printed");
+//         // Extract phone number, handle undefined values
+//         let phoneNumber = inArguments?.find(arg => arg.phoneNumber)?.phoneNumber;
+
+//         phoneNumber = req.body.keyValue;
+//         // if (!phoneNumber || phoneNumber.includes("{{")) {
+//         //     console.warn("Received unresolved SFMC token. Using default number.");
+//         //     phoneNumber = "918686793220"; // Default test number
+//         // }
+
+
+//         if (phoneNumber && phoneNumber.includes('{{Event.')) {
+//             console.error("⚠️ Placeholder detected instead of actual phone number.");
+//             return res.status(400).json({ error: "MobileNumber not resolved, check Journey Event Data." });
+//         }
+
+//         console.log("Processing phone number:", phoneNumber);
+
+//         // Authenticate and send data to SFMC
+//         const accessToken = await authenticate();
+//         const payload = buildPayload(phoneNumber);
+
+//         console.log("Sending data to SFMC:", JSON.stringify(payload, null, 2));
+
+//         const response = await axios.post(process.env.SFMC_API_URL, payload, {
+//             headers: {
+//                 "Content-Type": "application/json",
+//                 Authorization: `Bearer ${accessToken}`,
+//             },
+//         });
+
+//         console.log("SFMC Response:", JSON.stringify(response.data, null, 2));
+//         const optInStatus = response.data?.operationStatus === "OK" ? "Yes" : "No";
+
+//         return res.status(200).json({
+//             outArguments: [
+//                 { OptInStatus: optInStatus }
+//             ]
+//         })
+
+//     } catch (error) {
+//         console.error("Error processing request:", error.response?.data || error.message);
+//         return res.status(500).json({ error: error.response?.data || error.message });
+//     }
+// });
+
+
+
+// Other endpoints required by SFMC
+
+
 app.post('/modules/execute', async (req, res) => {
     console.log('Received /execute request:', JSON.stringify(req.body, null, 2));
 
     try {
-        const { inArguments } = req.body;
-        console.log("printing body");
-        console.log(req.body);
-        console.log("body printed");
-        // Extract phone number, handle undefined values
-        let phoneNumber = inArguments?.find(arg => arg.phoneNumber)?.phoneNumber;
-
-        phoneNumber = req.body.keyValue;
-        // if (!phoneNumber || phoneNumber.includes("{{")) {
-        //     console.warn("Received unresolved SFMC token. Using default number.");
-        //     phoneNumber = "918686793220"; // Default test number
-        // }
-
+        const { keyValue } = req.body; // Directly extract keyValue (which contains the phone number)
+        let phoneNumber = keyValue; // Use keyValue as the phone number
 
         if (phoneNumber && phoneNumber.includes('{{Event.')) {
-            console.error("⚠️ Placeholder detected instead of actual phone number.");
+            console.error("Placeholder detected instead of actual phone number.");
             return res.status(400).json({ error: "MobileNumber not resolved, check Journey Event Data." });
         }
 
@@ -118,8 +165,6 @@ app.post('/modules/execute', async (req, res) => {
 });
 
 
-
-// Other endpoints required by SFMC
 
 app.post('/modules/save', function(req, res) {
     console.log('debug: /modules/stop');
