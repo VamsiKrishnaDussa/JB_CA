@@ -104,7 +104,7 @@ app.post('/modules/execute', async (req, res) => {
 
         console.log("SFMC Response:", JSON.stringify(response.data, null, 2));
         console.log("printin response value");
-        console.log(response.operationStatus);
+        console.log(response.data?.operationStatus);
         console.log("response value printed");
         const optInStatus = response.data?.operationStatus === "OK" ? "Yes" : "No";
 
