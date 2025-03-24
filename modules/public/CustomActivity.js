@@ -63,7 +63,7 @@ define(["postmonger"], function (Postmonger) {
     
         // Explicitly trigger "save" to persist configuration
         console.log("Triggering saveActivity...");
-        //   connection.trigger("save");
+        connection.trigger("save");
     }
     
     
@@ -150,7 +150,7 @@ define(["postmonger"], function (Postmonger) {
     
         // send data to SFMC to confirm configuration
         console.log(" Triggering updateActivity...");
-        connection.trigger("updateActivity", payload);
+      //  connection.trigger("updateActivity", payload);
     }
     
 
