@@ -93,23 +93,42 @@ define(["postmonger"], function (Postmonger) {
             }),
             success: function (response) {
                 console.log("API Response:", JSON.stringify(response, null, 2));
-
-                // Determine the correct branch based on opt-in status
-                let branchResult = response.optInStatus === 'Yes' ? 'OptedIn' : 'OptedOut';
-
-                // Update the payload with branch result for routing
-              //  payload.arguments.execute.outArguments = [{ OptInStatus: response.optInStatus }];
+            
+                if (!response.OptInStatus) {
+                    console.error("Missing OptInStatus in API response.");
+                    alert("API response is missing required OptInStatus.");
+                    return;
+                }
+            
+                let branchResult = response.OptInStatus === 'Yes' ? 'OptedIn' : 'OptedOut';
+            
+                payload.arguments.execute.outArguments = [{ OptInStatus: response.OptInStatus }];
                 payload.outcome = branchResult;
-
+            
                 console.log("Updated Payload with branchResult:", JSON.stringify(payload, null, 2));
-
-                // Update SFMC with the modified payload
+            
                 connection.trigger("updateActivity", payload);
-                console.log(`Triggered updateActivity with branch: ${branchResult}`);
-
-                // Hide loading indicator
-                $("#loadingIndicator").hide();
             },
+            
+            // success: function (response) {
+            //     console.log("API Response:", JSON.stringify(response, null, 2));
+
+            //     // Determine the correct branch based on opt-in status
+            //     let branchResult = response.optInStatus === 'Yes' ? 'OptedIn' : 'OptedOut';
+
+            //     // Update the payload with branch result for routing
+            //   //  payload.arguments.execute.outArguments = [{ OptInStatus: response.optInStatus }];
+            //     payload.outcome = branchResult;
+
+            //     console.log("Updated Payload with branchResult:", JSON.stringify(payload, null, 2));
+
+            //     // Update SFMC with the modified payload
+            //     connection.trigger("updateActivity", payload);
+            //     console.log(`Triggered updateActivity with branch: ${branchResult}`);
+
+            //     // Hide loading indicator
+            //     $("#loadingIndicator").hide();
+            // },
             error: function (err) {
                 console.error("API call failed:", err);
                 alert("API call failed. Please check the console.");
