@@ -175,7 +175,6 @@
 //     console.log("Custom Activity script initialized.");
 // });
 
-
 define(["postmonger"], function (Postmonger) {
     console.log("Loading Custom Activity script...");
 
@@ -269,10 +268,10 @@ define(["postmonger"], function (Postmonger) {
             success: function (response) {
                 console.log("API Response:", JSON.stringify(response, null, 2));
 
-                // Ensure OptInStatus exists in the response
-                if (!response.OptInStatus) {
+                // Check if OptInStatus is missing in the response
+                if (!response || !response.OptInStatus) {
                     console.error("Missing OptInStatus in API response.");
-                    alert("API response is missing required OptInStatus.");
+                    alert("The response from the API is missing the required OptInStatus.");
                     return;
                 }
 
@@ -324,6 +323,7 @@ define(["postmonger"], function (Postmonger) {
 
     console.log("Custom Activity script initialized.");
 });
+
 
 
 
