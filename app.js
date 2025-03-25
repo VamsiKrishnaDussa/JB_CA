@@ -210,6 +210,7 @@ function buildPayload(phoneNumber) {
     };
 }
 
+
 app.post('/modules/execute', async (req, res) => {
     console.log('Received /execute request:', JSON.stringify(req.body, null, 2));
 
@@ -217,16 +218,9 @@ app.post('/modules/execute', async (req, res) => {
         const { inArguments } = req.body;
         let phoneNumber = inArguments?.find(arg => arg.phoneNumber)?.phoneNumber || req.body.keyValue;
 
-        console.log("Extracted phone number:", phoneNumber);
-
         if (!phoneNumber) {
             console.error("Missing phone number in request payload.");
             return res.status(400).json({ error: "Missing phone number in request payload." });
-        }
-
-        if (phoneNumber.includes('{{Event.')) {
-            console.error("Placeholder detected instead of actual phone number.");
-            return res.status(400).json({ error: "MobileNumber not resolved, check Journey Event Data." });
         }
 
         console.log("Processing phone number:", phoneNumber);
@@ -243,21 +237,76 @@ app.post('/modules/execute', async (req, res) => {
             },
         });
 
-        console.log("Full SFMC Response:", JSON.stringify(response.data, null, 2));
+        console.log("SFMC Response:", JSON.stringify(response.data, null, 2));
 
+        // Default to "No" if the API response is missing
         const optInStatus = response.data?.operationStatus === "OK" ? "Yes" : "No";
 
+        console.log("Returning OptInStatus:", optInStatus);
+
         return res.status(200).json({
-            outArguments: [
-                [{ OptInStatus: optInStatus }]
-            ]
+            outArguments: [{ OptInStatus: optInStatus }]
         });
 
     } catch (error) {
         console.error("Error processing request:", error.response?.data || error.message);
-        return res.status(500).json({ error: error.response?.data || error.message });
+
+        // Always return a valid response even in case of errors
+        return res.status(500).json({
+            outArguments: [{ OptInStatus: "Error" }]
+        });
     }
 });
+
+
+// app.post('/modules/execute', async (req, res) => {
+//     console.log('Received /execute request:', JSON.stringify(req.body, null, 2));
+
+//     try {
+//         const { inArguments } = req.body;
+//         let phoneNumber = inArguments?.find(arg => arg.phoneNumber)?.phoneNumber || req.body.keyValue;
+
+//         console.log("Extracted phone number:", phoneNumber);
+
+//         if (!phoneNumber) {
+//             console.error("Missing phone number in request payload.");
+//             return res.status(400).json({ error: "Missing phone number in request payload." });
+//         }
+
+//         if (phoneNumber.includes('{{Event.')) {
+//             console.error("Placeholder detected instead of actual phone number.");
+//             return res.status(400).json({ error: "MobileNumber not resolved, check Journey Event Data." });
+//         }
+
+//         console.log("Processing phone number:", phoneNumber);
+
+//         const accessToken = await authenticate();
+//         const payload = buildPayload(phoneNumber);
+
+//         console.log("Sending data to SFMC:", JSON.stringify(payload, null, 2));
+
+//         const response = await axios.post(process.env.SFMC_API_URL, payload, {
+//             headers: {
+//                 "Content-Type": "application/json",
+//                 Authorization: `Bearer ${accessToken}`,
+//             },
+//         });
+
+//         console.log("Full SFMC Response:", JSON.stringify(response.data, null, 2));
+
+//         const optInStatus = response.data?.operationStatus === "OK" ? "Yes" : "No";
+
+//         return res.status(200).json({
+//             outArguments: [
+//                 [{ OptInStatus: optInStatus }]
+//             ]
+//         });
+
+//     } catch (error) {
+//         console.error("Error processing request:", error.response?.data || error.message);
+//         return res.status(500).json({ error: error.response?.data || error.message });
+//     }
+// });
 
 // Required SFMC endpoints
 app.post('/modules/save', (req, res) => res.status(200).json({}));
