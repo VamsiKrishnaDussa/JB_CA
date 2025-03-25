@@ -85,7 +85,7 @@ define(["postmonger"], function (Postmonger) {
 
         // Call the API with the correct format
         $.ajax({
-            url: "https://splitbranch-ab8b48b255d1.herokuapp.com/execute",
+            url: "https://splitbranch-ab8b48b255d1.herokuapp.com/modules/execute",
             type: "POST",
             contentType: "application/json",
             data: JSON.stringify({
