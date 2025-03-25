@@ -20,7 +20,7 @@
             ],
             "outArguments": [
                 {
-                  "OptInStatus": ""
+                    "OptInStatus": ""
                 }
             ],
             "url": "https://customapp-9584657f551b.herokuapp.com/modules/execute",
@@ -78,14 +78,14 @@
                         }
                     }
                 ],
-                    "outArguments": [
-                        {
-                            "OptInStatus": {
-                                "dataType": "Text",
-                                "isNullable": true,
-                                "direction": "out"
-                            }
+                "outArguments": [
+                    {
+                        "OptInStatus": {
+                            "dataType": "Text",
+                            "isNullable": true,
+                            "direction": "out"
                         }
+                    }
                 ]
             }
         }
