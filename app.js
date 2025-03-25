@@ -75,7 +75,7 @@ app.post('/modules/execute', async (req, res) => {
         // Extract phone number, handle undefined values
         let phoneNumber = inArguments?.find(arg => arg.phoneNumber)?.phoneNumber;
 
-        //phoneNumber = req.body.keyValue;
+        phoneNumber = req.body.keyValue;
         // if (!phoneNumber || phoneNumber.includes("{{")) {
         //     console.warn("Received unresolved SFMC token. Using default number.");
         //     phoneNumber = "918686793220"; // Default test number
