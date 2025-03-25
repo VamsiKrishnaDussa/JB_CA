@@ -94,6 +94,7 @@ define(["postmonger"], function (Postmonger) {
             success: function (response) {
                 console.log("API Response:", JSON.stringify(response, null, 2));
             
+                // Ensure OptInStatus exists in the response
                 if (!response.OptInStatus) {
                     console.error("Missing OptInStatus in API response.");
                     alert("API response is missing required OptInStatus.");
@@ -102,11 +103,13 @@ define(["postmonger"], function (Postmonger) {
             
                 let branchResult = response.OptInStatus === 'Yes' ? 'OptedIn' : 'OptedOut';
             
+                // Ensure payload structure includes the required outArgument
                 payload.arguments.execute.outArguments = [{ OptInStatus: response.OptInStatus }];
                 payload.outcome = branchResult;
             
                 console.log("Updated Payload with branchResult:", JSON.stringify(payload, null, 2));
             
+                // Update SFMC with the modified payload
                 connection.trigger("updateActivity", payload);
             },
             
