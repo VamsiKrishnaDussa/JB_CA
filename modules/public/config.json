@@ -23,7 +23,7 @@
                   "OptInStatus": ""
                 }
             ],
-            "url": "https://splitbranch-ab8b48b255d1.herokuapp.com/modules/",
+            "url": "https://splitbranch-ab8b48b255d1.herokuapp.com/modules/execute",
             "editable": true
         }
     },
