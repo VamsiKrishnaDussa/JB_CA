@@ -176,7 +176,6 @@
 // });
 
 
-
 define(["postmonger"], function (Postmonger) {
     console.log("Loading Custom Activity script...");
 
@@ -218,7 +217,7 @@ define(["postmonger"], function (Postmonger) {
             payload.metaData.isConfigured = true;
         }
 
-        // Populate input field with keyValue (instead of phoneNumber)
+        // Populate input field if available
         if (payload.arguments.execute.inArguments.length > 0) {
             let keyValue = payload.arguments.execute.inArguments[0].keyValue;
             if (keyValue) {
@@ -252,8 +251,8 @@ define(["postmonger"], function (Postmonger) {
             return;
         }
 
-        // Use keyValue as phoneNumber in inArguments
-        payload.arguments.execute.inArguments = [{ phoneNumber: keyValue }];
+        // Ensure execute.arguments structure exists
+        payload.arguments.execute.inArguments = [{ keyValue: keyValue }];
         console.log("Payload prepared:", JSON.stringify(payload, null, 2));
 
         // Show loading indicator
@@ -265,7 +264,7 @@ define(["postmonger"], function (Postmonger) {
             type: "POST",
             contentType: "application/json",
             data: JSON.stringify({
-                inArguments: [{ phoneNumber: keyValue }]  // Send keyValue as phoneNumber
+                inArguments: [{ keyValue: keyValue }]  // Use keyValue in place of phoneNumber
             }),
             success: function (response) {
                 console.log("API Response:", JSON.stringify(response, null, 2));
@@ -306,10 +305,10 @@ define(["postmonger"], function (Postmonger) {
             return;
         }
 
-        // Ensure execute.arguments structure exists and set keyValue as phoneNumber
+        // Ensure execute.arguments structure exists and set keyValue as input
         payload.arguments = payload.arguments || {};
         payload.arguments.execute = payload.arguments.execute || {};
-        payload.arguments.execute.inArguments = [{ phoneNumber: keyValue }];
+        payload.arguments.execute.inArguments = [{ keyValue: keyValue }];
         payload.arguments.execute.editable = true;
 
         // Ensure activity is marked as configured
@@ -318,7 +317,7 @@ define(["postmonger"], function (Postmonger) {
 
         console.log("Final Payload Before Saving:", JSON.stringify(payload, null, 2));
 
-        // send data to SFMC to confirm configuration
+        // Send data to SFMC to confirm configuration
         console.log("Triggering updateActivity...");
         connection.trigger("updateActivity", payload);
     }
