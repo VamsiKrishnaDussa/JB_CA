@@ -34,46 +34,6 @@ define(["postmonger"], function (Postmonger) {
         connection.trigger("updateActivity", payload);
     }
 
-    // function onNextButtonClick() {
-    //     console.log("Next button clicked. Processing input...");
-
-    //     var keyValue = $("#inputBox").val().trim();
-    //     if (!keyValue) {
-    //         alert("Please enter a key value.");
-    //         return;
-    //     }
-
-    //     payload.arguments.execute.inArguments = [{ keyValue: keyValue }];
-    //     payload.arguments.execute.editable = true;
-
-    //     console.log("Payload prepared:", JSON.stringify(payload, null, 2));
-
-    //     $.ajax({
-    //         url: "https://splitbranch-ab8b48b255d1.herokuapp.com/modules/execute",
-    //         type: "POST",
-    //         contentType: "application/json",
-    //         data: JSON.stringify({ inArguments: [{ keyValue: keyValue }] }),
-    //         success: function (response) {
-    //             if (!response || !response.outArguments || !response.outArguments[0].OptInStatus) {
-    //                 alert("The response from the API is missing the required OptInStatus.");
-    //                 return;
-    //             }
-
-    //             let branchResult = response.outArguments[0].OptInStatus === 'Yes' ? 'OptedIn' : 'OptedOut';
-    //             payload.arguments.execute.outArguments = [{ OptInStatus: response.outArguments[0].OptInStatus }];
-    //             payload.outcome = branchResult;
-
-    //             console.log("Updated Payload:", JSON.stringify(payload, null, 2));
-
-    //             connection.trigger("updateActivity", payload);
-    //         },
-    //         error: function (err) {
-    //             console.error("API call failed:", err);
-    //             alert("API call failed. Please check the console.");
-    //         }
-    //     });
-    // }
-
     function onNextButtonClick() {
         console.log("Next button clicked. Processing input...");
     
@@ -89,7 +49,7 @@ define(["postmonger"], function (Postmonger) {
         console.log("Payload prepared:", JSON.stringify(payload, null, 2));
     
         $.ajax({
-            url: "https://splitbranch-ab8b48b255d1.herokuapp.com/modules/execute",
+            url: "https://splitbranch-ab8b48b255d1.herokuapp.com/modules/execute", // Example API endpoint
             type: "POST",
             contentType: "application/json",
             data: JSON.stringify({ inArguments: [{ keyValue: keyValue }] }),
@@ -114,8 +74,6 @@ define(["postmonger"], function (Postmonger) {
             }
         });
     }
-    
-    
 
     function onDoneButtonClick() {
         var keyValue = $("#inputBox").val().trim();
