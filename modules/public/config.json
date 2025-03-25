@@ -77,6 +77,15 @@
                             "direction": "in"
                         }
                     }
+                ],
+                    "outArguments": [
+                        {
+                            "OptInStatus": {
+                                "dataType": "Text",
+                                "isNullable": true,
+                                "direction": "out"
+                            }
+                        }
                 ]
             }
         }
