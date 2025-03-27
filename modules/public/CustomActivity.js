@@ -155,11 +155,17 @@ define(["postmonger"], function (Postmonger) {
             data: JSON.stringify({ inArguments: [{ keyValue: keyValue }] }), // Send keyValue properly
             success: function (response) {
                 console.log("API Response:", response);
-           
+            
+                // Ensure payload is defined
+                if (!payload) {
+                    console.error("Error: Payload is undefined or null.");
+                    return;
+                }
+            
                 // Check if response contains 'branchResult'
                 if (response && response.branchResult) {
                     let branchResult = response.branchResult === 'success' ? 'OptedIn' : 'OptedOut';
-           
+            
                     const outcome = {
                         arguments: {
                             branchResult: branchResult
@@ -168,19 +174,26 @@ define(["postmonger"], function (Postmonger) {
                             label: branchResult === 'OptedIn' ? 'Opted In' : 'Opted Out'
                         }
                     };
-           
+            
                     payload.outcomes = [outcome]; // Include the outcome in the payload
-           
+            
                     console.log("Updated Payload with Outcomes:", JSON.stringify(payload, null, 2));
-           
-                    // Trigger the updateActivity event with the updated payload
-                    connection.trigger("updateActivity", payload);
+            
+                    // Ensure payload is correctly populated before updating
+                    if (payload.outcomes && payload.outcomes.length > 0) {
+                        console.log("Triggering updateActivity with payload:", JSON.stringify(payload, null, 2));
+                        connection.trigger("updateActivity", payload);
+                        console.log("updateActivity triggered.");
+                    } else {
+                        console.error("Error: Outcomes are missing in the payload.");
+                    }
                 } else {
                     // Handle the case when 'branchResult' is not in the response
                     console.error("Error: 'branchResult' is missing in the API response.");
                     alert("The API response is missing the required 'branchResult'. Please check the API.");
                 }
             },
+            
            
             error: function (err) {
                 console.error("API call failed:", err);
