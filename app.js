@@ -66,8 +66,8 @@ app.post('/modules/execute', async (req, res) => {
     console.log('Received /execute request:', JSON.stringify(req.body, null, 2));
 
     try {
-        const { inArguments } = req.body;
-        let phoneNumber = inArguments?.find(arg => arg.phoneNumber)?.phoneNumber || req.body.keyValue;
+       // const { inArguments } = req.body;
+        let phoneNumber = req.body.keyValue;
         console.log("phone number",phoneNumber);
         if (!phoneNumber) {
             console.error("Missing phone number in request payload.");
