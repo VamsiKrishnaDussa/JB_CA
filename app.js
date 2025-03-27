@@ -59,16 +59,16 @@ app.post('/modules/execute', async (req, res) => {
     try {
         const { inArguments } = req.body;
         let phoneNumber = inArguments?.find(arg => arg.phoneNumber)?.phoneNumber || req.body.keyValue;
-
+        console.log("phone number",phoneNumber);
         if (!phoneNumber) {
             console.error("Missing phone number in request payload.");
             return res.status(400).json({ error: "Missing phone number." });
         }
 
-        if (phoneNumber.includes('{{Event.')) {
-            console.error("Placeholder detected instead of actual phone number.");
-            return res.status(400).json({ error: "MobileNumber not resolved, check Journey Event Data." });
-        }
+        // if (phoneNumber.includes('{{Event.')) {
+        //     console.error("Placeholder detected instead of actual phone number.");
+        //     return res.status(400).json({ error: "MobileNumber not resolved, check Journey Event Data." });
+        // }
 
         console.log("Processing phone number:", phoneNumber);
 
