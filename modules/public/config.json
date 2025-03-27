@@ -18,11 +18,6 @@
                     "phoneNumber": "{{Event.ChatEntryEven-3cab41dd-9e51-77f5-e026-9cd4051a4471.'MobileNumber'}}"
                 }
             ],
-            "outArguments": [
-                {
-                    "OptInStatus": ""
-                }
-            ],
             "url": "https://splitbranch-ab8b48b255d1.herokuapp.com/modules/execute",
             "editable": true
         }
@@ -65,29 +60,5 @@
                 "label": "Opted Out"
             }
         }
-    ],
-    "schema": {
-        "arguments": {
-            "execute": {
-                "inArguments": [
-                    {
-                        "phoneNumber": {
-                            "dataType": "Phone",
-                            "isNullable": false,
-                            "direction": "in"
-                        }
-                    }
-                ],
-                "outArguments": [
-                    {
-                        "OptInStatus": {
-                            "dataType": "Text",
-                            "isNullable": true,
-                            "direction": "out"
-                        }
-                    }
-                ]
-            }
-        }
-    }
+    ]
 }
