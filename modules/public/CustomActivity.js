@@ -155,34 +155,33 @@ define(["postmonger"], function (Postmonger) {
             data: JSON.stringify({ inArguments: [{ keyValue: keyValue }] }), // Send keyValue properly
             success: function (response) {
                 console.log("API Response:", response);
-        
-                // Ensure response contains branchResult
-                if (!response || !response.branchResult) {
-                    alert("The response from the API is missing the required branchResult.");
-                    return;
+           
+                // Check if response contains 'branchResult'
+                if (response && response.branchResult) {
+                    let branchResult = response.branchResult === 'success' ? 'OptedIn' : 'OptedOut';
+           
+                    const outcome = {
+                        arguments: {
+                            branchResult: branchResult
+                        },
+                        metaData: {
+                            label: branchResult === 'OptedIn' ? 'Opted In' : 'Opted Out'
+                        }
+                    };
+           
+                    payload.outcomes = [outcome]; // Include the outcome in the payload
+           
+                    console.log("Updated Payload with Outcomes:", JSON.stringify(payload, null, 2));
+           
+                    // Trigger the updateActivity event with the updated payload
+                    connection.trigger("updateActivity", payload);
+                } else {
+                    // Handle the case when 'branchResult' is not in the response
+                    console.error("Error: 'branchResult' is missing in the API response.");
+                    alert("The API response is missing the required 'branchResult'. Please check the API.");
                 }
-        
-                // Determine the outcome based on branchResult
-                let branchResult = response.branchResult === 'success' ? 'OptedIn' : 'OptedOut';
-        
-                // Prepare the outcome object according to the structure
-                const outcome = {
-                    arguments: {
-                        branchResult: branchResult
-                    },
-                    metaData: {
-                        label: branchResult === 'OptedIn' ? 'Opted In' : 'Opted Out'
-                    }
-                };
-        
-                // Update the payload with the appropriate outcome
-                payload.outcomes = [outcome]; // You can include multiple outcomes if necessary
-        
-                console.log("Updated Payload with Outcomes:", JSON.stringify(payload, null, 2));
-        
-                // Trigger the updateActivity event with the updated payload
-                connection.trigger("updateActivity", payload);
             },
+           
             error: function (err) {
                 console.error("API call failed:", err);
                 alert("API call failed. Please check the console.");
