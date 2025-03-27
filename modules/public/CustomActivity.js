@@ -99,6 +99,7 @@
 // // new code without arguments
 
 
+Postmonger.Debug = true; // Enable debugging for Postmonger
 
 define(["postmonger"], function (Postmonger) {
     console.log("Loading Custom Activity script...");
