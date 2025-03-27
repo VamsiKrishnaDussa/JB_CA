@@ -15,15 +15,22 @@ console.log("Inbound Call Custom Activity Initialized");
 async function authenticate() {
     try {
         console.log("Authenticating with SFMC.");
-        
+
+        // Print environment variables for debugging
+        console.log("SFMC_AUTH_URL:", process.env.SFMC_AUTH_URL);
+        console.log("CLIENT_ID:", process.env.client_id);
+        console.log("CLIENT_SECRET:", process.env.client_secret ? "***** (hidden)" : "MISSING");
+        console.log("ACCOUNT_ID:", process.env.account_id);
+
+
         const response = await axios.post(process.env.SFMC_AUTH_URL, {
             grant_type: "client_credentials",
-            client_id: process.env.CLIENT_ID,
-            client_secret: process.env.CLIENT_SECRET,
-            account_id: process.env.ACCOUNT_ID,
+            client_id: process.env.client_id,
+            client_secret: process.env.client_secret,
+            account_id: process.env.account_id,
         }, { headers: { "Content-Type": "application/json" } });
-        
-        console.log("Authentication Successful!");
+
+        console.log("Authentication Successful! Token:", response.data.access_token);
         return response.data.access_token;
     } catch (error) {
         console.error("SFMC Authentication Failed:", error.response?.data || error.message);
@@ -31,6 +38,8 @@ async function authenticate() {
     }
 }
 
+
+// Build payload for SFMC
 function buildPayload(phoneNumber) {
     return {
         contactKey: `Test_${phoneNumber}`,
