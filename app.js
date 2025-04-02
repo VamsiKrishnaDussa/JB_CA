@@ -45,23 +45,120 @@ function buildPayload(phoneNumber) {
     const date = new Date().toLocaleDateString("en-GB");
 
     return {
-        contactKey: `Test_${phoneNumber}`,
-        attributeSets: [{
-            name: "Chat Message Subscriptions",
-            items: [{
-                values: [
-                    { name: "ChannelId", value: "918523043444" },
-                    { name: "ChannelType", value: "WhatsApp" },
-                    { name: "MobileNumber", value: phoneNumber },
-                    { name: "OptInMethodID", value: "1" },
-                    { name: "OptInStatusID", value: "2" },
-                    { name: "OptOutDate", value: date},
-                    { name: "OptOutMethodID", value: "1" },
-                    { name: "OptOutStatusID", value: 0 },
-                    { name: "Source", value: 4 },
-                ],
-            }],
-        }]
+        contactKey: `CA_${phoneNumber}`,
+        // attributeSets: [{
+        //     name: "Chat Message Subscriptions",
+        //     items: [{
+        //         values: [
+        //             { name: "ChannelId", value: "918523043444" },
+        //             { name: "ChannelType", value: "WhatsApp" },
+        //             { name: "MobileNumber", value: phoneNumber },
+        //             { name: "OptInMethodID", value: "1" },
+        //             { name: "OptInStatusID", value: "2" },
+        //             { name: "OptOutDate", value: date},
+        //             { name: "OptOutMethodID", value: "1" },
+        //             { name: "OptOutStatusID", value: 0 },
+        //             { name: "Source", value: 4 },
+        //         ],
+        //     }],
+        // }]
+
+        attributeSets: [
+            {
+                name: "Chat Message Subscriptions",
+                items: [
+                    {
+                        values: [
+                            { name: "ChannelId", value: "918523043444" },
+                            { name: "ChannelType", value: "WhatsApp" },
+
+
+                            { name: "MobileNumber", value: phoneNumber },
+
+
+                            { name: "OptInMethodID", value: "1" },
+                            { name: "OptInStatusID", value: "2" },
+                            { name: "OptOutDate", value: date },
+                            { name: "OptOutMethodID", value: "1" },
+                            { name: "OptOutStatusID", value: 0 },
+                            { name: "Source", value: 4 }
+
+                        ]
+                    }
+                ]
+            },
+
+            {
+                name: "Chat Message Demographics",
+                items: [
+                    {
+                        values: [
+                            { name: "Carrier ID", value: "0" },
+                            { name: "Channel", value: "Mobile" },
+                            { name: "Locale", value: "IN" },
+                            { name: "Mobile Number", value: phoneNumber },
+                            { name: "Modified Date", value: date },
+                            { name: "Priority", value: "1" },
+                            { name: "Status", value: 1 }
+                        ]
+                    }
+                ]
+            },
+            {
+                name: "MobileConnect Demographics",
+                items: [
+                    {
+                        values: [
+                            { name: "Carrier ID", value: "0" },
+                            { name: "Channel", value: "Mobile" },
+                            { name: "Locale", value: "IN" },
+                            { name: "Mobile Number", value: phoneNumber },
+                            { name: "Priority", value: "1" },
+                            { name: "Status", value: 1 }
+                        ]
+                    }
+                ]
+            }
+
+            // {
+            //     "name": "Chat Message Demographics",
+            //     "items": [
+            //         {
+            //             "values": [
+            //                 { "name": "Carrier ID", "value": "0" },
+            //                 { "name": "Channel", "value": "Mobile" },
+
+
+            //                 { "name": "Locale", "value": "IN" },
+            //                 { "name": "Mobile Number", "value": phoneNumber },
+            //                 { "name": "Modified Date", "value": date },
+            //                 { "name": "Priority", "value": "1" },
+
+            //                 { "name": "Status", "value": 1 }
+            //             ]
+            //         }
+            //     ]
+            // },
+            // {
+            //     "name": "MobileConnect Demographics",
+            //     "items": [
+            //         {
+            //             "values": [
+            //                 { "name": "Carrier ID", "value": "0" },
+            //                 { "name": "Channel", "value": "Mobile" },
+
+
+            //                 { "name": "Locale", "value": "IN" },
+            //                 { "name": "Mobile Number", "value": phoneNumber },
+
+            //                 { "name": "Priority", "value": "1" },
+
+            //                 { "name": "Status", "value": 1 }
+            //             ]
+            //         }
+            //     ]
+            // }
+        ]
     };
 }
 
@@ -98,7 +195,7 @@ function buildPayload(phoneNumber) {
 
 //         console.log("SFMC Response:", JSON.stringify(response.data, null, 2));
 //         const optInStatus = response.data?.operationStatus === "OK" ? "Yes" : "No";
-        
+
 //         return res.status(200).json({
 //             branchResult: optInStatus === "Yes" ? "success" : "failure"
 //         });
