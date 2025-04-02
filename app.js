@@ -50,7 +50,7 @@ function buildPayload(phoneNumber) {
             name: "Chat Message Subscriptions",
             items: [{
                 values: [
-                    { name: "ChannelId", value: 918523043444 },
+                    { name: "ChannelId", value: "918523043444" },
                     { name: "ChannelType", value: "WhatsApp" },
                     { name: "MobileNumber", value: phoneNumber },
                     { name: "OptInMethodID", value: "1" },
