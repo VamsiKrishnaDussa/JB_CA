@@ -137,6 +137,78 @@ define(["postmonger"], function (Postmonger) {
         connection.trigger("updateActivity", payload);
     }
 
+    // function onNextButtonClick() {
+    //     console.log("Next button clicked. Processing input...");
+        
+    //     var keyValue = $("#inputBox").val().trim();
+    //    // keyValue=91868679;
+    //     if (!keyValue) {
+    //         alert("Please enter a key value.");
+    //         return;
+    //     }
+        
+    //     payload.arguments.execute.inArguments = [{ keyValue: keyValue }];
+    //     payload.arguments.execute.editable = true;
+        
+    //     console.log("Payload prepared:", JSON.stringify(payload, null, 2));
+        
+    //     $.ajax({
+    //         url: "https://splitbranch-ab8b48b255d1.herokuapp.com/modules/execute", // API endpoint
+    //         type: "POST",
+    //         contentType: "application/json",
+    //         data: JSON.stringify({ inArguments: [{ keyValue: keyValue }] }), // Send keyValue properly
+    //         success: function (response) {
+    //             console.log("API Response:", response);
+            
+    //             // Ensure payload is defined
+    //             if (!payload) {
+    //                 console.error("Error: Payload is undefined or null.");
+    //                 return;
+    //             }
+            
+    //             // Check if response contains 'branchResult'
+    //             if (response && response.branchResult) {
+    //                 let branchResult = response.branchResult === 'success' ? 'OptedIn' : 'OptedOut';
+            
+    //                 const outcome = {
+    //                     arguments: {
+    //                         branchResult: branchResult
+    //                     },
+    //                     metaData: {
+    //                         label: branchResult === 'OptedIn' ? 'Opted In' : 'Opted Out'
+    //                     }
+    //                 };
+            
+    //                 payload.outcomes = [outcome]; // Include the outcome in the payload
+            
+    //                 console.log("Updated Payload with Outcomes:", JSON.stringify(payload, null, 2));
+            
+    //                 // Ensure payload is correctly populated before updating
+    //                 if (payload.outcomes && payload.outcomes.length > 0) {
+    //                     console.log("Triggering updateActivity with payload:", JSON.stringify(payload, null, 2));
+    //                     connection.trigger("updateActivity", payload);
+    //                     console.log("updateActivity triggered.");
+    //                 } else {
+    //                     console.error("Error: Outcomes are missing in the payload.");
+    //                 }
+    //             } else {
+    //                 // Handle the case when 'branchResult' is not in the response
+    //                 console.error("Error: 'branchResult' is missing in the API response.");
+    //                 alert("The API response is missing the required 'branchResult'. Please check the API.");
+    //             }
+    //         },
+            
+           
+    //         error: function (err) {
+    //             console.error("API call failed:", err);
+    //             alert("API call failed. Please check the console.");
+    //         }
+    //     });
+        
+    // }
+
+
+
     function onNextButtonClick() {
         console.log("Next button clicked. Processing input...");
         
@@ -152,60 +224,37 @@ define(["postmonger"], function (Postmonger) {
         console.log("Payload prepared:", JSON.stringify(payload, null, 2));
         
         $.ajax({
-            url: "https://splitbranch-ab8b48b255d1.herokuapp.com/modules/execute", // API endpoint
+            url: "https://splitbranch-ab8b48b255d1.herokuapp.com/modules/execute",
             type: "POST",
             contentType: "application/json",
-            data: JSON.stringify({ inArguments: [{ keyValue: keyValue }] }), // Send keyValue properly
+            data: JSON.stringify({ keyValue: keyValue }), // Fixed payload structure
             success: function (response) {
                 console.log("API Response:", response);
             
-                // Ensure payload is defined
-                if (!payload) {
-                    console.error("Error: Payload is undefined or null.");
+                if (!response || !response.branchResult) {
+                    console.error("Error: 'branchResult' is missing in the API response.");
+                    alert("The API response is missing 'branchResult'. Please check the API.");
                     return;
                 }
-            
-                // Check if response contains 'branchResult'
-                if (response && response.branchResult) {
-                    let branchResult = response.branchResult === 'success' ? 'OptedIn' : 'OptedOut';
-            
-                    const outcome = {
-                        arguments: {
-                            branchResult: branchResult
-                        },
-                        metaData: {
-                            label: branchResult === 'OptedIn' ? 'Opted In' : 'Opted Out'
-                        }
-                    };
-            
-                    payload.outcomes = [outcome]; // Include the outcome in the payload
-            
-                    console.log("Updated Payload with Outcomes:", JSON.stringify(payload, null, 2));
-            
-                    // Ensure payload is correctly populated before updating
-                    if (payload.outcomes && payload.outcomes.length > 0) {
-                        console.log("Triggering updateActivity with payload:", JSON.stringify(payload, null, 2));
-                        connection.trigger("updateActivity", payload);
-                        console.log("updateActivity triggered.");
-                    } else {
-                        console.error("Error: Outcomes are missing in the payload.");
-                    }
-                } else {
-                    // Handle the case when 'branchResult' is not in the response
-                    console.error("Error: 'branchResult' is missing in the API response.");
-                    alert("The API response is missing the required 'branchResult'. Please check the API.");
-                }
+    
+                let branchResult = response.branchResult; // Correctly assign received branch result
+                
+                payload.outcomes = [{
+                    arguments: { branchResult: branchResult },
+                    metaData: { label: branchResult === 'OptedIn' ? 'Opted In' : 'Opted Out' }
+                }];
+    
+                console.log("Updated Payload with Outcomes:", JSON.stringify(payload, null, 2));
+    
+                connection.trigger("updateActivity", payload);
             },
-            
-           
             error: function (err) {
                 console.error("API call failed:", err);
                 alert("API call failed. Please check the console.");
             }
         });
-        
     }
-
+    
     function onDoneButtonClick() {
         var keyValue = $("#inputBox").val().trim();
         if (!keyValue) {

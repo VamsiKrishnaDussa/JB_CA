@@ -62,29 +62,70 @@ function buildPayload(phoneNumber) {
     };
 }
 
+// app.post('/modules/execute', async (req, res) => {
+//     console.log('Received /execute request:', JSON.stringify(req.body, null, 2));
+
+//     try {
+//        // const { inArguments } = req.body;
+//         let phoneNumber = req.body.keyValue;
+//         phoneNumber=91868679;
+//         console.log("phone number",phoneNumber);
+//         if (!phoneNumber) {
+//             console.error("Missing phone number in request payload.");
+//             return res.status(400).json({ error: "Missing phone number." });
+//         }
+
+//         // if (phoneNumber.includes('{{Event.')) {
+//         //     console.error("Placeholder detected instead of actual phone number.");
+//         //     return res.status(400).json({ error: "MobileNumber not resolved, check Journey Event Data." });
+//         // }
+
+//         console.log("Processing phone number:", phoneNumber);
+
+//         const accessToken = await authenticate();
+//         const payload = buildPayload(phoneNumber);
+//         console.log("Sending data to SFMC:", JSON.stringify(payload, null, 2));
+
+//         const response = await axios.post(process.env.SFMC_API_URL, payload, {
+//             headers: {
+//                 "Content-Type": "application/json",
+//                 Authorization: `Bearer ${accessToken}`,
+//             },
+//         });
+
+//         console.log("SFMC Response:", JSON.stringify(response.data, null, 2));
+//         const optInStatus = response.data?.operationStatus === "OK" ? "Yes" : "No";
+        
+//         return res.status(200).json({
+//             branchResult: optInStatus === "Yes" ? "success" : "failure"
+//         });
+//     } catch (error) {
+//         console.error("Error processing request:", error.response?.data || error.message);
+//         return res.status(500).json({ error: error.response?.data || error.message });
+//     }
+// });
+
+
+
+
 app.post('/modules/execute', async (req, res) => {
     console.log('Received /execute request:', JSON.stringify(req.body, null, 2));
 
     try {
-       // const { inArguments } = req.body;
-        let phoneNumber = req.body.keyValue;
-        console.log("phone number",phoneNumber);
-        if (!phoneNumber) {
+        const { keyValue } = req.body;
+        if (!keyValue) {
             console.error("Missing phone number in request payload.");
             return res.status(400).json({ error: "Missing phone number." });
         }
 
-        // if (phoneNumber.includes('{{Event.')) {
-        //     console.error("Placeholder detected instead of actual phone number.");
-        //     return res.status(400).json({ error: "MobileNumber not resolved, check Journey Event Data." });
-        // }
+        console.log("Processing phone number:", keyValue);
 
-        console.log("Processing phone number:", phoneNumber);
-
+        // Authenticate with SFMC
         const accessToken = await authenticate();
-        const payload = buildPayload(phoneNumber);
+        const payload = buildPayload(keyValue);
         console.log("Sending data to SFMC:", JSON.stringify(payload, null, 2));
 
+        // Send data to SFMC
         const response = await axios.post(process.env.SFMC_API_URL, payload, {
             headers: {
                 "Content-Type": "application/json",
@@ -93,16 +134,18 @@ app.post('/modules/execute', async (req, res) => {
         });
 
         console.log("SFMC Response:", JSON.stringify(response.data, null, 2));
-        const optInStatus = response.data?.operationStatus === "OK" ? "Yes" : "No";
-        
-        return res.status(200).json({
-            branchResult: optInStatus === "Yes" ? "success" : "failure"
-        });
+
+        // Determine opt-in status
+        const optInStatus = response.data?.operationStatus === "OK" ? "OptedIn" : "OptedOut";
+
+        return res.status(200).json({ branchResult: optInStatus });
     } catch (error) {
         console.error("Error processing request:", error.response?.data || error.message);
         return res.status(500).json({ error: error.response?.data || error.message });
     }
 });
+
+
 
 app.post('/modules/save', (req, res) => res.status(200).json({}));
 app.post('/modules/publish', (req, res) => res.status(200).json({}));
